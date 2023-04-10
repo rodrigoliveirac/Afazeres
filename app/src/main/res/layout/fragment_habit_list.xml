@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F8F8F8"
+        tools:context=".collections.HabitListFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/habitRecyclerViewCompleted"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="80dp"
+            android:background="#F8F8F8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/completed"
+            app:layout_constraintTop_toBottomOf="@id/completed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/completed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:text="Completed"
+            android:textColor="#575767"
+            android:textSize="18sp"
+            app:fontFamily="@font/inter_bold"
+            app:layout_constraintBottom_toTopOf="@id/habitRecyclerViewCompleted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/habitRecyclerView">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/habitRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="16dp"
+            android:background="#F8F8F8"
+            app:layout_constraintBottom_toTopOf="@id/completed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/incomplete"
+            app:layout_constraintTop_toBottomOf="@id/incomplete" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/incomplete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:text="Incomplete"
+            android:textColor="#575767"
+            android:textSize="18sp"
+            app:fontFamily="@font/inter_bold"
+            app:layout_constraintBottom_toTopOf="@id/habitRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/header_title"
+            app:layout_constraintTop_toBottomOf="@id/header_title">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header_title"
+            android:layout_width="343dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="8dp"
+                android:textColor="#292B35"
+                android:textSize="32sp"
+                app:drawableEndCompat="@drawable/ic_dropdown"
+                app:fontFamily="@font/inter_bold"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="0dp"
+                tools:text="March 9, 2020" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="343dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="8dp"
+                android:alpha="0.1"
+                android:background="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/current_date" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="18dp"
+                android:textColor="#575767"
+                android:textSize="14sp"
+                app:fontFamily="@font/inter_semibold"
+                app:layout_constraintBottom_toTopOf="@id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/current_date"
+                app:layout_constraintTop_toBottomOf="@id/current_date"
+                app:layout_constraintVertical_bias="0.615"
+                tools:text="5 incomplete, 5 completed" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/accessibility_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+
+

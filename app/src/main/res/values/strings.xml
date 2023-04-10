@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Habits</string>
+    <string name="title_activity_main">My Habits</string>
+    <string name="title_habit_list">Habit List</string>
+    <string name="habit_title">Habit title</string>
+    <string name="habit_subtitle">Category</string>
+
+    <!-- days of week -->
+    <string name="mon">Monday</string>
+    <string name="tue">Tuesday</string>
+    <string name="wed">Wednesday</string>
+    <string name="thu">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="sat">Saturday</string>
+    <string name="sun">Sunday</string>
+
+    <string name="save">To salve</string>
+    <!-- Content Descriptions and Accessibility Text -->
+    <string name="accessibility_add">Add Habit</string>
+
+    <string-array name="priorities">
+        <item>LOW</item>
+        <item>MEDIUM</item>
+        <item>HIGH</item>
+    </string-array>
+
+</resources>
