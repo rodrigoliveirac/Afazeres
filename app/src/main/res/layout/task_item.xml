@@ -39,7 +39,7 @@
         android:id="@+id/subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:textColor="#B9B9BE"
         android:textSize="14sp"
@@ -47,28 +47,5 @@
         app:layout_constraintStart_toEndOf="@+id/completeCheckBox"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:text="Finance" />
-
-    <ImageView
-        android:id="@+id/priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title"
-        app:srcCompat="@drawable/flag_high_priority" />
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_priority"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:background="@drawable/rounded_border_textview"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/completeCheckBox"-->
-    <!--        app:layout_constraintHorizontal_bias="0.984"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintVertical_bias="0.511"-->
-    <!--        tools:text="LOW" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
