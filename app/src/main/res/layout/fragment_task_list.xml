@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F8F8F8"
-        tools:context=".collections.HabitListFragment">
+        tools:context=".collections.TaskListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/habitRecyclerViewCompleted"
+            android:id="@+id/taskRecyclerViewCompleted"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="4dp"
@@ -31,19 +31,19 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:padding="8dp"
-            android:text="Completed"
+            android:text="@string/completed"
             android:textColor="#575767"
             android:textSize="18sp"
             app:fontFamily="@font/inter_bold"
-            app:layout_constraintBottom_toTopOf="@id/habitRecyclerViewCompleted"
+            app:layout_constraintBottom_toTopOf="@id/taskRecyclerViewCompleted"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/habitRecyclerView">
+            app:layout_constraintTop_toBottomOf="@id/taskRecyclerView">
 
         </com.google.android.material.textview.MaterialTextView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/habitRecyclerView"
+            android:id="@+id/taskRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="4dp"
@@ -63,11 +63,11 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:padding="8dp"
-            android:text="Incomplete"
+            android:text="@string/incomplete"
             android:textColor="#575767"
             android:textSize="18sp"
             app:fontFamily="@font/inter_bold"
-            app:layout_constraintBottom_toTopOf="@id/habitRecyclerView"
+            app:layout_constraintBottom_toTopOf="@id/taskRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/header_title"
             app:layout_constraintTop_toBottomOf="@id/header_title">

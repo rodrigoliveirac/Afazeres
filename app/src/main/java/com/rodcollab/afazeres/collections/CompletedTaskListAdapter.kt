@@ -5,19 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.rodcollab.afazeres.databinding.HabitItemBinding
+import com.rodcollab.afazeres.databinding.TaskItemBinding
 
+class CompletedTaskListAdapter(
+    private val viewModel: TaskListViewModel
+) : RecyclerView.Adapter<CompletedTaskListAdapter.ViewHolder>() {
 
-class HabitListAdapter(
-    private val viewModel: HabitListViewModel
-) : RecyclerView.Adapter<HabitListAdapter.ViewHolder>() {
-
-    private val asyncListDiffer: AsyncListDiffer<HabitItem> = AsyncListDiffer(this, DiffCallback)
+    private val asyncListDiffer: AsyncListDiffer<TaskItem> = AsyncListDiffer(this, DiffCallback)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = HabitItemBinding.inflate(layoutInflater, parent, false)
+        val binding = TaskItemBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding, viewModel)
     }
 
@@ -27,33 +26,31 @@ class HabitListAdapter(
 
     override fun getItemCount(): Int = asyncListDiffer.currentList.size
 
-    fun updateHabits(habits: List<HabitItem>) {
+    fun updateTasks(habits: List<TaskItem>) {
         asyncListDiffer.submitList(habits)
     }
 
     class ViewHolder(
-        private val binding: HabitItemBinding,
-        private val viewModel: HabitListViewModel,
+        private val binding: TaskItemBinding,
+        private val viewModel: TaskListViewModel,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(habit: HabitItem) {
+        fun bind(habit: TaskItem) {
             binding.title.text = habit.title
-            binding.subtitle.text = habit.category
             binding.completeCheckBox.isChecked = habit.isCompleted
             binding.completeCheckBox.setOnClickListener {
-                viewModel.toggleHabitCompleted(habit.id)
+                viewModel.toggleTaskCompleted(habit.id)
             }
         }
 
     }
 
-    object DiffCallback : DiffUtil.ItemCallback<HabitItem>() {
-        override fun areItemsTheSame(oldItem: HabitItem, newItem: HabitItem): Boolean {
+    object DiffCallback : DiffUtil.ItemCallback<TaskItem>() {
+        override fun areItemsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: HabitItem, newItem: HabitItem): Boolean {
+        override fun areContentsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
             return oldItem.isCompleted == newItem.isCompleted
         }
     }
 }
-

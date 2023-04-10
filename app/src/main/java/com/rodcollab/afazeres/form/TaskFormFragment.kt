@@ -7,25 +7,37 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.rodcollab.afazeres.collections.HabitListViewModel
-import com.rodcollab.afazeres.databinding.FragmentHabitFormBinding
-import com.rodcollab.afazeres.dummy.MockHabits
+import com.rodcollab.afazeres.collections.TaskListViewModel
+import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCaseImpl
+import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCaseImpl
+import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCaseImpl
+import com.rodcollab.afazeres.core.repository.TasksRepositoryImpl
+import com.rodcollab.afazeres.databinding.FragmentTaskFormBinding
 import java.text.SimpleDateFormat
 
 
-class HabitFormFragment : Fragment() {
+class TaskFormFragment : Fragment() {
 
-    private var _binding: FragmentHabitFormBinding? = null
+    private var _binding: FragmentTaskFormBinding? = null
 
     private val binding get() = _binding!!
 
-    private val viewModel: HabitListViewModel by activityViewModels {
-        HabitListViewModel.Factory(MockHabits)
+    private val viewModel: TaskListViewModel by activityViewModels {
+        val tasksRepository = TasksRepositoryImpl()
+        val onToggleTaskCompletedUseCase = OnToggleTaskCompletedUseCaseImpl(tasksRepository)
+        val getCompletedTasksUseCase = GetCompletedTasksUseCaseImpl(tasksRepository)
+        val getUncompletedTasksUseCase = GetUncompletedTasksUseCaseImpl(tasksRepository)
+
+        TaskListViewModel.Factory(
+            tasksRepository,
+            onToggleTaskCompletedUseCase,
+            getCompletedTasksUseCase,
+            getUncompletedTasksUseCase
+        )
     }
 
     override fun onCreateView(
@@ -33,7 +45,7 @@ class HabitFormFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHabitFormBinding.inflate(inflater, container, false)
+        _binding = FragmentTaskFormBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,10 +60,8 @@ class HabitFormFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupDateField() {
 
-        //to hide keyboard
         binding.dateEditText.keyListener = null
 
-        //when the user click on the editText then show material date picker up
         binding.dateEditText.setOnTouchListener(OnTouchListener { _, event ->
             if (MotionEvent.ACTION_UP == event.action) {
                 setupMaterialDatePicker()
@@ -82,7 +92,7 @@ class HabitFormFragment : Fragment() {
 
         val habitDate = binding.dateTextInput.editText?.text.toString()
 
-        viewModel.addHabit(habitName, habitCategory, habitDate)
+        viewModel.addForm(habitName, habitCategory, habitDate)
 
         findNavController().navigateUp()
 

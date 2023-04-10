@@ -7,20 +7,20 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.rodcollab.afazeres.collections.HabitListFragment"
-        android:label="@string/title_habit_list"
-        tools:layout="@layout/fragment_habit_list">
+        android:name="com.rodcollab.afazeres.collections.TaskListFragment"
+        android:label="@string/title_task_list"
+        tools:layout="@layout/fragment_task_list">
 
         <action
-            android:id="@+id/action_habitList_to_habitForm"
-            app:destination="@id/habitFormFragment" />
+            android:id="@+id/action_taskList_to_taskForm"
+            app:destination="@id/taskFormFragment" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/habitFormFragment"
-        android:name="com.rodcollab.afazeres.form.HabitFormFragment"
-        android:label="Habit Form" />
+        android:id="@+id/taskFormFragment"
+        android:name="com.rodcollab.afazeres.form.TaskFormFragment"
+        android:label="Task Form" />
 
 
 </navigation>

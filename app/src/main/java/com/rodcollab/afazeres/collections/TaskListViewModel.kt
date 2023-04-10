@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HabitListViewModel(
+class TaskListViewModel(
     private val repository: TasksRepository,
     private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
     private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
@@ -71,7 +71,7 @@ class HabitListViewModel(
         getTasks()
     }
 
-    fun toggleHabitCompleted(id: String) {
+    fun toggleTaskCompleted(id: String) {
         viewModelScope.launch {
             onToggleTaskCompletedUseCase(id)
         }
@@ -112,7 +112,7 @@ class HabitListViewModel(
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return HabitListViewModel(
+            return TaskListViewModel(
                 repository,
                 onToggleTaskCompletedUseCase,
                 getCompletedTasksUseCase,

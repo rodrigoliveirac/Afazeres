@@ -8,42 +8,57 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.rodcollab.afazeres.R
-import com.rodcollab.afazeres.databinding.FragmentHabitListBinding
-import com.rodcollab.afazeres.dummy.MockHabits
+import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCaseImpl
+import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCaseImpl
+import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCaseImpl
+import com.rodcollab.afazeres.core.repository.TasksRepositoryImpl
+import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
+import kotlinx.coroutines.*
 
 @RequiresApi(Build.VERSION_CODES.O)
-class HabitListFragment : Fragment() {
+class TaskListFragment : Fragment() {
 
-    private var _binding: FragmentHabitListBinding? = null
+    private var _binding: FragmentTaskListBinding? = null
 
     private val binding get() = _binding!!
 
-    private lateinit var adapter: HabitListAdapter
-    private lateinit var adapterCompleted: HabitListCompletedAdapter
+    private lateinit var adapter: UncompletedTaskListAdapter
+    private lateinit var adapterCompleted: CompletedTaskListAdapter
+    private lateinit var observer: TaskListObserver
 
-    private val viewModel: HabitListViewModel by activityViewModels {
-        HabitListViewModel.Factory(MockHabits)
+    private val viewModel: TaskListViewModel by activityViewModels {
+        val tasksRepository = TasksRepositoryImpl()
+        val onToggleTaskCompletedUseCase = OnToggleTaskCompletedUseCaseImpl(tasksRepository)
+        val getCompletedTasksUseCase = GetCompletedTasksUseCaseImpl(tasksRepository)
+        val getUncompletedTasksUseCase = GetUncompletedTasksUseCaseImpl(tasksRepository)
+
+        TaskListViewModel.Factory(
+            tasksRepository,
+            onToggleTaskCompletedUseCase,
+            getCompletedTasksUseCase,
+            getUncompletedTasksUseCase
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        adapter = HabitListAdapter(viewModel)
-        adapterCompleted = HabitListCompletedAdapter(viewModel)
+        observer = TaskListObserver(viewModel)
+        lifecycle.addObserver(observer)
+        adapter = UncompletedTaskListAdapter(viewModel)
+        adapterCompleted = CompletedTaskListAdapter(viewModel)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHabitListBinding.inflate(inflater, container, false)
+        _binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -52,11 +67,11 @@ class HabitListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.habitRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.habitRecyclerView.adapter = adapter
+        binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskRecyclerView.adapter = adapter
 
-        binding.habitRecyclerViewCompleted.layoutManager = LinearLayoutManager(requireContext())
-        binding.habitRecyclerViewCompleted.adapter = adapterCompleted
+        binding.taskRecyclerViewCompleted.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskRecyclerViewCompleted.adapter = adapterCompleted
 
         viewModel
             .stateOnceAndStream()
@@ -72,7 +87,7 @@ class HabitListFragment : Fragment() {
         })
 
         binding.fab.setOnClickListener {
-          findNavController().navigate(R.id.habitFormFragment)
+            findNavController().navigate(R.id.taskFormFragment)
         }
     }
 
@@ -88,7 +103,7 @@ class HabitListFragment : Fragment() {
         }
     }
 
-    private fun bindUiState(uiState: HabitListViewModel.UiState) {
+    private fun bindUiState(uiState: TaskListViewModel.UiState) {
 
         val totalIncomplete = uiState.uncompletedTasks.size
         val totalCompleted = uiState.completedTasks.size
@@ -100,8 +115,8 @@ class HabitListFragment : Fragment() {
                 "$totalIncomplete incomplete, $totalCompleted completed"
 
 
-        adapter.updateHabits(uiState.uncompletedTasks)
-        adapterCompleted.updateHabits(uiState.completedTasks)
+        adapter.updateTasks(uiState.uncompletedTasks)
+        adapterCompleted.updateTasks(uiState.completedTasks)
 
         binding.currentDate.text = uiState.date
     }
