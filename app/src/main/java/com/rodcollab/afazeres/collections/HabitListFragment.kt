@@ -88,50 +88,22 @@ class HabitListFragment : Fragment() {
         }
     }
 
-    /**
-     * Bind UI State to View.
-     *
-     * Update list of habits according to updates.
-     */
-
     private fun bindUiState(uiState: HabitListViewModel.UiState) {
 
-        val totalIncomplete = uiState.habitItemListCompleted.size
-        val totalCompleted = uiState.habitItemListIncomplete.size
+        val totalIncomplete = uiState.uncompletedTasks.size
+        val totalCompleted = uiState.completedTasks.size
 
         if (totalIncomplete == 0 && totalCompleted == 0)
-            binding.total.text = "You don't have notes"
+            binding.total.text = "You don't have tasks"
         else
             binding.total.text =
                 "$totalIncomplete incomplete, $totalCompleted completed"
 
 
-        adapter.updateHabits(uiState.habitItemListIncomplete)
-        adapterCompleted.updateHabits(uiState.habitItemListCompleted)
+        adapter.updateHabits(uiState.uncompletedTasks)
+        adapterCompleted.updateHabits(uiState.completedTasks)
+
         binding.currentDate.text = uiState.date
-    }
-
-    private fun addingDividerDecoration() {
-        // Adding Line between items with MaterialDividerItemDecoration
-        val divider = MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-
-        // Adding the line at the end of the list
-        divider.isLastItemDecorated = true
-
-        val resources = requireContext().resources
-
-        // Adding start spacing
-        divider.dividerInsetStart = resources.getDimensionPixelSize(R.dimen.horizontal_margin)
-
-        // Defining size of the line
-        divider.dividerThickness = resources.getDimensionPixelSize(R.dimen.divider_height)
-        divider.dividerColor = ContextCompat.getColor(requireContext(), R.color.primary_200)
-
-//        binding.habitRecyclerView.addItemDecoration(divider)
-    }
-
-    private fun addingDividerSpace() {
-        binding.habitRecyclerView.addItemDecoration(HabitListItemDecoration(requireContext()))
     }
 
     override fun onDestroyView() {

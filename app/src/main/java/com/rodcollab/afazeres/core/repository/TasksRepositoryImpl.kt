@@ -5,24 +5,37 @@ import java.util.UUID
 
 class TasksRepositoryImpl : TasksRepository {
 
-    private val tasks: MutableList<TaskDomain> = mutableListOf()
+    private var tasks: MutableList<TaskDomain> = mutableListOf()
 
-    override suspend fun uncompletedTasks() = tasks.filter { it.isCompleted }
+    private var taskFlow: MutableStateFlow<List<TaskDomain>> = MutableStateFlow(tasks)
 
-    override suspend fun completedTasks() = tasks.filter { !it.isCompleted }
+    override fun uncompletedTasks(): Flow<List<TaskDomain>> {
+        return taskFlow.map { tasks ->
+            tasks.filter { !it.isCompleted }
+        }
+    }
+
+    override fun completedTasks() : Flow<List<TaskDomain>> {
+        return taskFlow.map { tasks ->
+            tasks.filter { it.isCompleted }
+        }
+    }
 
     override suspend fun toggleTaskCompleted(taskId: String) {
-        tasks.map {
-            if (it.taskId == taskId) {
-                it.copy(isCompleted = !it.isCompleted)
-            } else {
-                it.copy()
-            }
+
+        withContext(Dispatchers.IO) {
+            tasks = tasks.map {
+                if (it.taskId == taskId) {
+                    it.copy(isCompleted = !it.isCompleted)
+                } else {
+                    it.copy()
+                }
+            } as MutableList<TaskDomain>
+            taskFlow.value = tasks
         }
     }
 
     override suspend fun add(
-        taskId: String,
         taskTitle: String,
         taskCategory: String,
         taskDate: String
@@ -36,5 +49,7 @@ class TasksRepositoryImpl : TasksRepository {
                 isCompleted = false
             )
         )
+
+        taskFlow.value = tasks.toList()
     }
 }
