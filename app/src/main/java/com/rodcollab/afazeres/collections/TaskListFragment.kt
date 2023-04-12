@@ -91,6 +91,27 @@ class TaskListFragment : Fragment() {
         }
     }
 
+    private fun observeTasks() {
+        viewModel
+            .stateOnceAndStream()
+            .observe(viewLifecycleOwner) {
+                bindUiState(it)
+            }
+    }
+
+    private fun setupCompletedTasksAdapter() {
+        binding.taskRecyclerViewCompleted.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskRecyclerViewCompleted.adapter = adapterCompletedTasks
+    }
+
+    private fun setupUncompletedTasksAdapter() {
+        binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.taskRecyclerView.adapter = adapterUncompletedTasks
+
+        val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapterUncompletedTasks))
+        itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun setupMaterialDatePicker() {
         val builder: MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()

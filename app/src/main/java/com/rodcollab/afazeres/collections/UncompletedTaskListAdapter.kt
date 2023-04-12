@@ -21,6 +21,10 @@ class UncompletedTaskListAdapter(
         return ViewHolder(binding, viewModel)
     }
 
+    fun itemList() : MutableList<TaskItem> {
+        return asyncListDiffer.currentList.toMutableList()
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(asyncListDiffer.currentList[position])
     }
@@ -29,6 +33,11 @@ class UncompletedTaskListAdapter(
 
     fun updateTasks(habits: List<TaskItem>) {
         asyncListDiffer.submitList(habits)
+    }
+
+    fun removeItem(position: Int) {
+        val taskId = asyncListDiffer.currentList[position].id
+        viewModel.deleteTask(taskId)
     }
 
     class ViewHolder(

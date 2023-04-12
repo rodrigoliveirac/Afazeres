@@ -12,7 +12,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="My tasks"
             android:theme="@style/Theme.App.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
