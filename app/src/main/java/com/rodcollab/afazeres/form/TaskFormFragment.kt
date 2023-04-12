@@ -11,10 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.rodcollab.afazeres.collections.TaskListViewModel
-import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCaseImpl
-import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCaseImpl
-import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCaseImpl
+import com.rodcollab.afazeres.core.database.AppDatabase
 import com.rodcollab.afazeres.core.repository.TasksRepositoryImpl
 import com.rodcollab.afazeres.databinding.FragmentTaskFormBinding
 import java.text.SimpleDateFormat
@@ -26,17 +23,12 @@ class TaskFormFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val viewModel: TaskListViewModel by activityViewModels {
-        val tasksRepository = TasksRepositoryImpl()
-        val onToggleTaskCompletedUseCase = OnToggleTaskCompletedUseCaseImpl(tasksRepository)
-        val getCompletedTasksUseCase = GetCompletedTasksUseCaseImpl(tasksRepository)
-        val getUncompletedTasksUseCase = GetUncompletedTasksUseCaseImpl(tasksRepository)
+    private val viewModel: TaskFormViewModel by activityViewModels {
+        val db = AppDatabase.getInstance(requireContext())
+        val tasksRepository = TasksRepositoryImpl(db)
 
-        TaskListViewModel.Factory(
-            tasksRepository,
-            onToggleTaskCompletedUseCase,
-            getCompletedTasksUseCase,
-            getUncompletedTasksUseCase
+        TaskFormViewModel.Factory(
+            tasksRepository
         )
     }
 
