@@ -2,18 +2,17 @@ package com.rodcollab.afazeres.collections
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.*
+import com.rodcollab.afazeres.collections.domain.DeleteTaskUseCase
 import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCase
 import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCase
 import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCase
-import com.rodcollab.afazeres.core.repository.TasksRepository
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TaskListViewModel(
-    private val repository: TasksRepository,
+    private val deleteTaskUseCase : DeleteTaskUseCase,
     private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
     private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
     private val getUncompletedTasksUseCase: GetUncompletedTasksUseCase
@@ -32,17 +31,18 @@ class TaskListViewModel(
     }
 
     private fun getUncompletedTasks() {
-        getTasksJob = getUncompletedTasksUseCase()
-            .onEach { tasks ->
+        viewModelScope.launch {
+             getUncompletedTasksUseCase().collect {
                 uiState.value?.let { currentState ->
                     uiState.value =
-                        currentState.copy(uncompletedTasks = tasks.filter { it.date == currentState.date })
+                        currentState.copy(uncompletedTasks = it.filter { it.date == currentState.date })
                 }
-            }.launchIn(viewModelScope)
+            }
+        }
     }
 
     private fun getCompletedTasks() {
-        getTasksJob = getCompletedTasksUseCase()
+      getTasksJob = getCompletedTasksUseCase()
             .onEach { tasks ->
                 uiState.value?.let { currentState ->
                     uiState.value =
@@ -68,22 +68,15 @@ class TaskListViewModel(
     }
 
     fun onResume() {
-        getTasks()
-    }
-
-    fun toggleTaskCompleted(id: String) {
         viewModelScope.launch {
-            onToggleTaskCompletedUseCase(id)
+            getTasks()
         }
     }
 
-    fun addForm(
-        name: String,
-        category: String,
-        habitDate: String
-    ) {
+    fun toggleTaskCompleted(id: String, isCompleted: Boolean) {
         viewModelScope.launch {
-            repository.add(name, category, habitDate)
+            val checkedInt = if(!isCompleted) 1 else 0
+            onToggleTaskCompletedUseCase(id, checkedInt)
         }
     }
 
@@ -97,6 +90,12 @@ class TaskListViewModel(
         return newValue
     }
 
+    fun deleteTask(id: String) {
+        viewModelScope.launch {
+            deleteTaskUseCase(id)
+        }
+    }
+
     data class UiState(
         val completedTasks: List<TaskItem>,
         val uncompletedTasks: List<TaskItem>,
@@ -105,7 +104,7 @@ class TaskListViewModel(
 
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val repository: TasksRepository,
+        private val deleteTaskUseCase: DeleteTaskUseCase,
         private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
         private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
         private val getUncompletedTasksUseCase: GetUncompletedTasksUseCase
@@ -113,7 +112,7 @@ class TaskListViewModel(
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TaskListViewModel(
-                repository,
+                deleteTaskUseCase,
                 onToggleTaskCompletedUseCase,
                 getCompletedTasksUseCase,
                 getUncompletedTasksUseCase

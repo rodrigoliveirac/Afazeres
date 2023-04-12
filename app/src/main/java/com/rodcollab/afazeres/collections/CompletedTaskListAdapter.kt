@@ -38,7 +38,7 @@ class CompletedTaskListAdapter(
             binding.title.text = habit.title
             binding.completeCheckBox.isChecked = habit.isCompleted
             binding.completeCheckBox.setOnClickListener {
-                viewModel.toggleTaskCompleted(habit.id)
+                viewModel.toggleTaskCompleted(habit.id, habit.isCompleted)
             }
         }
 

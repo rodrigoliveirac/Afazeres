@@ -1,41 +1,47 @@
 package com.rodcollab.afazeres.core.repository
 
+import com.rodcollab.afazeres.core.database.AppDatabase
+import com.rodcollab.afazeres.core.database.entity.Task
 import com.rodcollab.afazeres.core.model.TaskDomain
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withContext
-import java.util.UUID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.util.*
 
-class TasksRepositoryImpl : TasksRepository {
+class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
 
-    private var tasks: MutableList<TaskDomain> = mutableListOf()
+    private val tasks = appDatabase.taskDao()
 
-    private var taskFlow: MutableStateFlow<List<TaskDomain>> = MutableStateFlow(tasks)
-
-    override fun uncompletedTasks(): Flow<List<TaskDomain>> {
-        return taskFlow.map { tasks ->
-            tasks.filter { !it.isCompleted }
+    override  fun uncompletedTasks(): Flow<List<TaskDomain>> {
+        return tasks.fetchUncompletedTasks().map { tasks ->
+            tasks.map {
+                TaskDomain(
+                    taskId = it.uuid,
+                    taskTitle = it.title,
+                    taskCategory = it.category,
+                    taskDate = it.date,
+                    isCompleted = it.isCompleted
+                )
+            }
         }
     }
 
-    override fun completedTasks() : Flow<List<TaskDomain>> {
-        return taskFlow.map { tasks ->
-            tasks.filter { it.isCompleted }
+    override fun completedTasks(): Flow<List<TaskDomain>> {
+        return tasks.fetchCompletedTasks().map { tasks ->
+            tasks.map {
+                TaskDomain(
+                    taskId = it.uuid,
+                    taskTitle = it.title,
+                    taskCategory = it.category,
+                    taskDate = it.date,
+                    isCompleted = it.isCompleted
+                )
+            }
         }
     }
 
-    override suspend fun toggleTaskCompleted(taskId: String) {
+    override suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int) {
 
-        withContext(Dispatchers.IO) {
-            tasks = tasks.map {
-                if (it.taskId == taskId) {
-                    it.copy(isCompleted = !it.isCompleted)
-                } else {
-                    it.copy()
-                }
-            } as MutableList<TaskDomain>
-            taskFlow.value = tasks
-        }
+        tasks.onToggleChecked(taskId, isCompleted)
     }
 
     override suspend fun add(
@@ -43,16 +49,19 @@ class TasksRepositoryImpl : TasksRepository {
         taskCategory: String,
         taskDate: String
     ) {
-        tasks.add(
-            TaskDomain(
-                taskId = UUID.randomUUID().toString(),
-                taskTitle = taskTitle,
-                taskCategory = taskCategory,
-                taskDate = taskDate,
+        tasks.insert(
+
+            Task(
+                uuid = UUID.randomUUID().toString(),
+                title = taskTitle,
+                category = taskCategory,
+                date = taskDate,
                 isCompleted = false
             )
         )
+    }
 
-        taskFlow.value = tasks.toList()
+    override suspend fun delete(taskId: String) {
+        tasks.delete(taskId)
     }
 }

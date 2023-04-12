@@ -9,7 +9,8 @@ interface TasksRepository {
 
     fun completedTasks(): Flow<List<TaskDomain>>
 
-    suspend fun toggleTaskCompleted(taskId: String)
+    suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int)
 
     suspend fun add(taskTitle: String, taskCategory: String, taskDate: String)
+    suspend fun delete(taskId: String)
 }
