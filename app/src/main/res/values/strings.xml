@@ -10,5 +10,7 @@
     <string name="accessibility_add">Add Task</string>
     <string name="completed">Completed</string>
     <string name="incomplete">Incomplete</string>
+    <string name="no_notes">You don\'t have tasks</string>
+    <string name="total_notes">%s incomplete, %s completed</string>
 
 </resources>
