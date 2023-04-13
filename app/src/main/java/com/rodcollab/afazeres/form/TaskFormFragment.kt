@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +23,7 @@ class TaskFormFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: TaskFormViewModel by activityViewModels {
-        val db = AppDatabase.getInstance(requireContext())
+        val db = AppDatabase.getInstance(requireActivity().applicationContext)
         val tasksRepository = TasksRepositoryImpl(db)
 
         TaskFormViewModel.Factory(
@@ -54,12 +53,12 @@ class TaskFormFragment : Fragment() {
 
         binding.dateEditText.keyListener = null
 
-        binding.dateEditText.setOnTouchListener(OnTouchListener { _, event ->
+        binding.dateEditText.setOnTouchListener { _, event ->
             if (MotionEvent.ACTION_UP == event.action) {
                 setupMaterialDatePicker()
             }
             true
-        })
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -71,8 +70,8 @@ class TaskFormFragment : Fragment() {
 
         picker.addOnPositiveButtonClickListener {
             binding.dateEditText.setText(picker.headerText)
-
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -88,5 +87,11 @@ class TaskFormFragment : Fragment() {
 
         findNavController().navigateUp()
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

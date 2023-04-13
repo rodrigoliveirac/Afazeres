@@ -37,7 +37,7 @@ class TaskListFragment : Fragment() {
     private lateinit var observer: TaskListObserver
 
     private val viewModel: TaskListViewModel by activityViewModels {
-        val db = AppDatabase.getInstance(requireContext())
+        val db = AppDatabase.getInstance(requireActivity().applicationContext)
         val tasksRepository = TasksRepositoryImpl(db)
         val deleteTaskUseCase = DeleteTaskUseCaseImpl(tasksRepository)
         val onToggleTaskCompletedUseCase = OnToggleTaskCompletedUseCaseImpl(tasksRepository)
@@ -86,12 +86,12 @@ class TaskListFragment : Fragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupPickerCurrentDate() {
-        binding.currentDate.setOnTouchListener(View.OnTouchListener { _, event ->
+        binding.currentDate.setOnTouchListener { _, event ->
             if (MotionEvent.ACTION_UP == event.action) {
                 setupMaterialDatePicker()
             }
             true
-        })
+        }
     }
 
     private fun addTaskFab() {
@@ -135,14 +135,15 @@ class TaskListFragment : Fragment() {
 
     private fun bindUiState(uiState: TaskListViewModel.UiState) {
 
-        scope.launch {
-            totalTasks(uiState)
-        }
+
+        totalTasks(uiState)
+
+        binding.currentDate.text = uiState.date
 
         adapterUncompletedTasks.updateTasks(uiState.uncompletedTasks)
         adapterCompletedTasks.updateTasks(uiState.completedTasks)
 
-        binding.currentDate.text = uiState.date
+
     }
 
     private fun totalTasks(uiState: TaskListViewModel.UiState) {
@@ -150,15 +151,15 @@ class TaskListFragment : Fragment() {
         val totalCompleted = uiState.uncompletedTasks.size
 
         if (totalIncomplete == 0 && totalCompleted == 0)
-            binding.total.text = "You don't have tasks"
+            binding.total.text = getString(R.string.no_notes)
         else
-            binding.total.text =
-                "$totalIncomplete incomplete, $totalCompleted completed"
+            binding.total.text = getString(R.string.total_notes, totalIncomplete.toString(), totalCompleted.toString())
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        scope.cancel()
+        binding.taskRecyclerView.adapter = null
+        binding.taskRecyclerViewCompleted.adapter = null
         _binding = null
     }
 }

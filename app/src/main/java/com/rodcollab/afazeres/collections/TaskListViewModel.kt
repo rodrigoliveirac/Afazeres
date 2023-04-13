@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TaskListViewModel(
-    private val deleteTaskUseCase : DeleteTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
     private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
     private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
     private val getUncompletedTasksUseCase: GetUncompletedTasksUseCase
@@ -25,24 +25,21 @@ class TaskListViewModel(
 
         getTasksJob?.cancel()
 
-        getCompletedTasks()
-
         getUncompletedTasks()
+        getCompletedTasks()
     }
 
     private fun getUncompletedTasks() {
-        viewModelScope.launch {
-             getUncompletedTasksUseCase().collect {
-                uiState.value?.let { currentState ->
-                    uiState.value =
-                        currentState.copy(uncompletedTasks = it.filter { it.date == currentState.date })
-                }
+        getTasksJob = getUncompletedTasksUseCase().onEach { tasks ->
+            uiState.value?.let { currentState ->
+                uiState.value =
+                    currentState.copy(uncompletedTasks = tasks.filter { it.date == currentState.date })
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     private fun getCompletedTasks() {
-      getTasksJob = getCompletedTasksUseCase()
+        getTasksJob = getCompletedTasksUseCase()
             .onEach { tasks ->
                 uiState.value?.let { currentState ->
                     uiState.value =
@@ -75,7 +72,7 @@ class TaskListViewModel(
 
     fun toggleTaskCompleted(id: String, isCompleted: Boolean) {
         viewModelScope.launch {
-            val checkedInt = if(!isCompleted) 1 else 0
+            val checkedInt = if (!isCompleted) 1 else 0
             onToggleTaskCompletedUseCase(id, checkedInt)
         }
     }
