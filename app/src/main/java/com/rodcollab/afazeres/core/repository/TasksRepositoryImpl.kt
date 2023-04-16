@@ -1,18 +1,17 @@
 package com.rodcollab.afazeres.core.repository
 
-import com.rodcollab.afazeres.core.database.AppDatabase
+import com.rodcollab.afazeres.core.database.dao.TaskDao
 import com.rodcollab.afazeres.core.database.entity.Task
 import com.rodcollab.afazeres.core.model.TaskDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.*
+import javax.inject.Inject
 
-class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
-
-    private val tasks = appDatabase.taskDao()
+class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksRepository {
 
     override  fun uncompletedTasks(): Flow<List<TaskDomain>> {
-        return tasks.fetchUncompletedTasks().map { tasks ->
+        return dao.fetchUncompletedTasks().map { tasks ->
             tasks.map {
                 TaskDomain(
                     taskId = it.uuid,
@@ -26,7 +25,7 @@ class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
     }
 
     override fun completedTasks(): Flow<List<TaskDomain>> {
-        return tasks.fetchCompletedTasks().map { tasks ->
+        return dao.fetchCompletedTasks().map { tasks ->
             tasks.map {
                 TaskDomain(
                     taskId = it.uuid,
@@ -41,7 +40,7 @@ class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
 
     override suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int) {
 
-        tasks.onToggleChecked(taskId, isCompleted)
+        dao.onToggleChecked(taskId, isCompleted)
     }
 
     override suspend fun add(
@@ -49,7 +48,7 @@ class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
         taskCategory: String,
         taskDate: String
     ) {
-        tasks.insert(
+        dao.insert(
 
             Task(
                 uuid = UUID.randomUUID().toString(),
@@ -62,6 +61,6 @@ class TasksRepositoryImpl(appDatabase: AppDatabase) : TasksRepository {
     }
 
     override suspend fun delete(taskId: String) {
-        tasks.delete(taskId)
+        dao.delete(taskId)
     }
 }

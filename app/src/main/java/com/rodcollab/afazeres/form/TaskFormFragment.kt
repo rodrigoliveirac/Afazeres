@@ -7,28 +7,26 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.rodcollab.afazeres.core.database.AppDatabase
-import com.rodcollab.afazeres.core.repository.TasksRepositoryImpl
 import com.rodcollab.afazeres.databinding.FragmentTaskFormBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 
 
+@AndroidEntryPoint
 class TaskFormFragment : Fragment() {
 
     private var _binding: FragmentTaskFormBinding? = null
 
     private val binding get() = _binding!!
 
-    private val viewModel: TaskFormViewModel by activityViewModels {
-        val db = AppDatabase.getInstance(requireActivity().applicationContext)
-        val tasksRepository = TasksRepositoryImpl(db)
+    private lateinit var viewModel: TaskFormViewModel
 
-        TaskFormViewModel.Factory(
-            tasksRepository
-        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[TaskFormViewModel::class.java]
     }
 
     override fun onCreateView(

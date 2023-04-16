@@ -1,15 +1,18 @@
-package com.rodcollab.afazeres.collections
+package com.rodcollab.afazeres.collections.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.rodcollab.afazeres.collections.TaskListViewModel
+import com.rodcollab.afazeres.collections.model.TaskItem
 import com.rodcollab.afazeres.databinding.TaskItemBinding
 
-class CompletedTaskListAdapter(
+
+class UncompletedTaskListAdapter(
     private val viewModel: TaskListViewModel
-) : RecyclerView.Adapter<CompletedTaskListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<UncompletedTaskListAdapter.ViewHolder>() {
 
     private val asyncListDiffer: AsyncListDiffer<TaskItem> = AsyncListDiffer(this, DiffCallback)
 
@@ -18,6 +21,10 @@ class CompletedTaskListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = TaskItemBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding, viewModel)
+    }
+
+    fun itemList() : MutableList<TaskItem> {
+        return asyncListDiffer.currentList.toMutableList()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -30,12 +37,18 @@ class CompletedTaskListAdapter(
         asyncListDiffer.submitList(habits)
     }
 
+    fun removeItem(position: Int) {
+        val taskId = asyncListDiffer.currentList[position].id
+        viewModel.deleteTask(taskId)
+    }
+
     class ViewHolder(
         private val binding: TaskItemBinding,
         private val viewModel: TaskListViewModel,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(habit: TaskItem) {
             binding.title.text = habit.title
+            binding.subtitle.text = habit.category
             binding.completeCheckBox.isChecked = habit.isCompleted
             binding.completeCheckBox.setOnClickListener {
                 viewModel.toggleTaskCompleted(habit.id, habit.isCompleted)
@@ -54,3 +67,4 @@ class CompletedTaskListAdapter(
         }
     }
 }
+

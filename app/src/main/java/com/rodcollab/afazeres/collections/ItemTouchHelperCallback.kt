@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.rodcollab.afazeres.R
+import com.rodcollab.afazeres.collections.adapters.UncompletedTaskListAdapter
 import java.util.*
 
 class ItemTouchHelperCallback(private val adapter: UncompletedTaskListAdapter) :

@@ -6,12 +6,16 @@ import com.rodcollab.afazeres.collections.domain.DeleteTaskUseCase
 import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCase
 import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCase
 import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCase
+import com.rodcollab.afazeres.collections.model.TaskItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class TaskListViewModel(
+@HiltViewModel
+class TaskListViewModel @Inject constructor (
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
     private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
@@ -98,22 +102,4 @@ class TaskListViewModel(
         val uncompletedTasks: List<TaskItem>,
         val date: String
     )
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val deleteTaskUseCase: DeleteTaskUseCase,
-        private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
-        private val getCompletedTasksUseCase: GetCompletedTasksUseCase,
-        private val getUncompletedTasksUseCase: GetUncompletedTasksUseCase
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TaskListViewModel(
-                deleteTaskUseCase,
-                onToggleTaskCompletedUseCase,
-                getCompletedTasksUseCase,
-                getUncompletedTasksUseCase
-            ) as T
-        }
-    }
 }

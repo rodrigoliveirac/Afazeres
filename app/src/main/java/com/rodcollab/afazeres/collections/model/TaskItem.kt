@@ -1,4 +1,4 @@
-package com.rodcollab.afazeres.collections
+package com.rodcollab.afazeres.collections.model
 
 data class TaskItem(
     val id: String,

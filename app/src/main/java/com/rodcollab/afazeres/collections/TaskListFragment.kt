@@ -9,22 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.rodcollab.afazeres.R
-import com.rodcollab.afazeres.collections.domain.DeleteTaskUseCaseImpl
-import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCaseImpl
-import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCaseImpl
-import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCaseImpl
-import com.rodcollab.afazeres.core.database.AppDatabase
-import com.rodcollab.afazeres.core.repository.TasksRepositoryImpl
+import com.rodcollab.afazeres.collections.adapters.CompletedTaskListAdapter
+import com.rodcollab.afazeres.collections.adapters.UncompletedTaskListAdapter
 import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 @RequiresApi(Build.VERSION_CODES.O)
+@AndroidEntryPoint
 class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
@@ -36,25 +34,11 @@ class TaskListFragment : Fragment() {
     private lateinit var adapterCompletedTasks: CompletedTaskListAdapter
     private lateinit var observer: TaskListObserver
 
-    private val viewModel: TaskListViewModel by activityViewModels {
-        val db = AppDatabase.getInstance(requireActivity().applicationContext)
-        val tasksRepository = TasksRepositoryImpl(db)
-        val deleteTaskUseCase = DeleteTaskUseCaseImpl(tasksRepository)
-        val onToggleTaskCompletedUseCase = OnToggleTaskCompletedUseCaseImpl(tasksRepository)
-        val getCompletedTasksUseCase = GetCompletedTasksUseCaseImpl(tasksRepository)
-        val getUncompletedTasksUseCase = GetUncompletedTasksUseCaseImpl(tasksRepository)
-
-        TaskListViewModel.Factory(
-            deleteTaskUseCase,
-            onToggleTaskCompletedUseCase,
-            getCompletedTasksUseCase,
-            getUncompletedTasksUseCase
-        )
-    }
+    private lateinit var viewModel: TaskListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        scope = CoroutineScope(Dispatchers.Main + Job())
+        viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
         observer = TaskListObserver(viewModel)
         lifecycle.addObserver(observer)
         adapterUncompletedTasks = UncompletedTaskListAdapter(viewModel)
