@@ -1,6 +1,7 @@
 package com.rodcollab.afazeres.collections
 
 import android.annotation.SuppressLint
+import androidx.fragment.app.Fragment
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -29,18 +29,15 @@ class TaskListFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private lateinit var scope: CoroutineScope
     private lateinit var adapterUncompletedTasks: UncompletedTaskListAdapter
     private lateinit var adapterCompletedTasks: CompletedTaskListAdapter
-    private lateinit var observer: TaskListObserver
 
     private lateinit var viewModel: TaskListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[TaskListViewModel::class.java]
-        observer = TaskListObserver(viewModel)
-        lifecycle.addObserver(observer)
+        lifecycle.addObserver(TaskListObserver(viewModel))
         adapterUncompletedTasks = UncompletedTaskListAdapter(viewModel)
         adapterCompletedTasks = CompletedTaskListAdapter(viewModel)
     }
@@ -131,13 +128,13 @@ class TaskListFragment : Fragment() {
     }
 
     private fun totalTasks(uiState: TaskListViewModel.UiState) {
-        val totalIncomplete = uiState.completedTasks.size
-        val totalCompleted = uiState.uncompletedTasks.size
+        val totalUncompletedTasks = uiState.uncompletedTasks.size
+        val totalCompleted =  uiState.completedTasks.size
 
-        if (totalIncomplete == 0 && totalCompleted == 0)
+        if (totalUncompletedTasks == 0 && totalCompleted == 0)
             binding.total.text = getString(R.string.no_notes)
         else
-            binding.total.text = getString(R.string.total_notes, totalIncomplete.toString(), totalCompleted.toString())
+            binding.total.text = getString(R.string.total_notes, totalUncompletedTasks.toString(), totalCompleted.toString())
     }
 
     override fun onDestroyView() {
