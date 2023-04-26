@@ -18,7 +18,9 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     taskTitle = it.title,
                     taskCategory = it.category,
                     taskDate = it.date,
-                    isCompleted = it.isCompleted
+                    isCompleted = it.isCompleted,
+                    alarmActive = it.alarmActive,
+                    reminderTime = it.reminderTime
                 )
             }
         }
@@ -32,7 +34,9 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     taskTitle = it.title,
                     taskCategory = it.category,
                     taskDate = it.date,
-                    isCompleted = it.isCompleted
+                    isCompleted = it.isCompleted,
+                    alarmActive = it.alarmActive,
+                    reminderTime = it.reminderTime
                 )
             }
         }
@@ -46,7 +50,10 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
     override suspend fun add(
         taskTitle: String,
         taskCategory: String,
-        taskDate: String
+        taskDate: String,
+        taskTime: Long,
+        alarmActive: Boolean,
+        reminderTime:Long?
     ) {
         dao.insert(
 
@@ -55,7 +62,10 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                 title = taskTitle,
                 category = taskCategory,
                 date = taskDate,
-                isCompleted = false
+                time = taskTime,
+                isCompleted = false,
+                alarmActive = alarmActive,
+                reminderTime = reminderTime
             )
         )
     }
