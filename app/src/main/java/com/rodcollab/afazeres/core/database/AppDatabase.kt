@@ -10,7 +10,7 @@ import com.rodcollab.afazeres.core.database.entity.Task
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 
-@Database(entities = [Task::class], version = 1, exportSchema = false)
+@Database(entities = [Task::class], version = 3, exportSchema = false)
 @TypeConverters(BooleanToIntConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -27,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         AppDatabase::class.java, DATABASE_NAME
-                    )
+                    ).fallbackToDestructiveMigration()
                         .build()
                 }
             }

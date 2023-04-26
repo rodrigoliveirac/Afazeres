@@ -5,5 +5,7 @@ data class TaskDomain(
     val taskTitle: String,
     val taskCategory: String,
     val taskDate: String,
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
+    val alarmActive: Boolean,
+    val reminderTime: Long?,
 )
