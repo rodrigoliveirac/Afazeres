@@ -45,13 +45,40 @@
             android:hint="Date"
             app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24"
             app:startIconTint="#292B35"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/time_text_input"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleTextInput"
             tools:ignore="HardcodedText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+
+                app:maxLines="1">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/time_text_input"
+            style="?attr/textInputFilledStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginEnd="@dimen/vertical_margin"
+            android:hint="Time"
+            app:startIconDrawable="@drawable/ic_time"
+            app:startIconTint="#292B35"
+            app:layout_constraintStart_toEndOf="@id/date_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleTextInput"
+            tools:ignore="HardcodedText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/timeEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
