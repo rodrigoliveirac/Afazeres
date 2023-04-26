@@ -51,7 +51,7 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         taskTitle: String,
         taskCategory: String,
         taskDate: String,
-        taskTime: Long,
+        taskTime: Long?,
         alarmActive: Boolean,
         reminderTime:Long?
     ) {

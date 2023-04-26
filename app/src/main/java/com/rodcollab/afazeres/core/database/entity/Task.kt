@@ -12,7 +12,7 @@ data class Task(
     @ColumnInfo(name = "task_title") val title: String,
     @ColumnInfo(name = "task_category") val category: String,
     @ColumnInfo(name = "task_date") val date: String,
-    @ColumnInfo(name = "task_time") val time: Long,
+    @ColumnInfo(name = "task_time") val time: Long?,
     @TypeConverters(BooleanToIntConverter::class)
     @ColumnInfo(name = "task_isCompleted") val isCompleted: Boolean,
     @ColumnInfo(name = "task_alarmActive") val alarmActive: Boolean,
