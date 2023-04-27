@@ -39,7 +39,7 @@ class TaskFormFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedPrefs = requireContext().getSharedPreferences("TASK_REMINDER", 0)
         viewModel = ViewModelProvider(this)[TaskFormViewModel::class.java]
-        lifecycle.addObserver(TaskFormObserver(viewModel))
+        lifecycle.addObserver(TaskFormObserver(_binding, viewModel))
     }
 
     override fun onCreateView(
@@ -80,9 +80,10 @@ class TaskFormFragment : Fragment() {
 
     private fun setupAlarmSwitch() {
 
+
         binding.setAlarmSwitch.setOnCheckedChangeListener { btnView, isChecked ->
             setupIcon(isChecked)
-            if (isChecked) {
+            if (isChecked && viewModel.stateOnceAndStream().value?.alarmActive == false) {
                 dialogSetReminderTime(btnView)
             } else {
                 viewModel.alarmStatus(false)
@@ -167,7 +168,6 @@ class TaskFormFragment : Fragment() {
 
         alertDialog.setNegativeButton("Cancel") { dialog, _ ->
             viewModel.alarmStatus(false)
-            dialog.dismiss()
         }
 
         // create and build the AlertDialog instance with the AlertDialog builder instance

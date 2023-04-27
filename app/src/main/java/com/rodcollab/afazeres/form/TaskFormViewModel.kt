@@ -29,16 +29,25 @@ class TaskFormViewModel @Inject constructor(private val repository: TasksReposit
 
     fun alarmStatus(alarmActive: Boolean) {
         viewModelScope.launch {
-            uiState.value?.let { currentUiState ->
-                uiState.value = currentUiState.copy(alarmActive = alarmActive)
-            }
+            uiState.postValue(
+                uiState.value?.let {
+                    UiState(
+                        dateField = it.dateField,
+                        timeField = it.timeField,
+                        alarmActive = alarmActive,
+                        reminderTime = it.reminderTime
+                    )
+                }
+            )
         }
 
     }
 
     fun reminderTime(reminderTime: String) {
-        uiState.value?.let { currentUiState ->
-            uiState.value = currentUiState.copy(reminderTime = reminderTime)
+        viewModelScope.launch {
+            uiState.value?.let { currentUiState ->
+                uiState.value = currentUiState.copy(reminderTime = reminderTime)
+            }
         }
     }
 
@@ -61,6 +70,7 @@ class TaskFormViewModel @Inject constructor(private val repository: TasksReposit
                 reminderTime = reminderTime
             )
         }
+
     }
 
     fun onResume() {
