@@ -11,6 +11,6 @@ interface TasksRepository {
 
     suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int)
 
-    suspend fun add(taskTitle: String, taskCategory: String, taskDate: String, taskTime: Long?, alarmActive: Boolean, reminderTime: Long?)
+    suspend fun add(taskTitle: String, taskCategory: String, taskDate: Long?, taskTime: String?, alarmActive: Boolean, reminderTime: Long?, triggerTime: Long?)
     suspend fun delete(taskId: String)
 }

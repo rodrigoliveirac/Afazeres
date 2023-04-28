@@ -72,7 +72,7 @@ class TaskFormFragment : Fragment() {
                 } else if (binding.timeEditText.text.toString().isBlank() && it.alarmActive) {
                     mustSet("time")
                 } else {
-                    onSave(it.alarmActive, it.reminderTime)
+                    onSave(it.alarmActive, it.reminderTime, it.datePicked)
                 }
             }
         }
@@ -228,7 +228,8 @@ class TaskFormFragment : Fragment() {
         pickerTime.show(this.parentFragmentManager, "fragment_tag")
         pickerTime.addOnPositiveButtonClickListener {
             val taskTime = formatTextTime(pickerTime.hour, pickerTime.minute)
-            sharedPrefs.edit().putString("TIME", taskTime).apply()
+            //TODO("test this later. you got he idea")
+           //  viewModel.updateTimePicked(pickerTime.hour,pickerTime.minute)
             binding.timeEditText.setText(taskTime)
         }
     }
@@ -240,21 +241,23 @@ class TaskFormFragment : Fragment() {
         picker.show(this.parentFragmentManager, "DATE_PICKER")
 
         picker.addOnPositiveButtonClickListener {
+
+            viewModel.updateDatePicked(it as Long)
             binding.dateEditText.setText(picker.headerText)
         }
+
+
 
     }
 
 
-    private fun onSave(isAlarmActive: Boolean, reminderTime: String) {
+
+
+    private fun onSave(isAlarmActive: Boolean, reminderTime: Long, taskDate: Long?) {
 
         val taskTitle = binding.titleTextInput.editText?.text.toString()
-        val taskDate = binding.dateTextInput.editText?.text.toString()
-        val taskTimeString = binding.timeTextInput.editText?.text.toString()
-        val taskTime = if (taskTimeString != "") getValueTimeInLong(taskTimeString) else null
+        val taskTime = binding.timeTextInput.editText?.text.toString()
         val taskCategory = getCategoryValue()
-
-        val reminderTimeValue = toLong(reminderTime)
 
         viewModel.addForm(
             taskTitle,
@@ -262,7 +265,7 @@ class TaskFormFragment : Fragment() {
             taskDate,
             taskTime,
             isAlarmActive,
-            reminderTimeValue
+            reminderTime
         )
 
         findNavController().navigateUp()
@@ -273,28 +276,6 @@ class TaskFormFragment : Fragment() {
         R.id.category_personal -> "Personal"
         else -> {
             "Work"
-        }
-    }
-
-    private fun getValueTimeInLong(view: CharSequence): Long {
-        return view.toString().split(":").mapIndexed { index, string ->
-            when (index) {
-                0 -> string.toLong() * 3600000L
-                else -> {
-                    string.toLong() * 60000L
-                }
-            }
-        }.sumOf { it }
-    }
-
-    private fun toLong(reminderTimeText: String): Long? {
-        return when (reminderTimeText) {
-            "1 hour before" -> 3600000L
-            "30 min before" -> 1800000L
-            "15 min before" -> 900000L
-            else -> {
-                null
-            }
         }
     }
 

@@ -110,7 +110,7 @@ class TaskListFragment : Fragment() {
         picker.show(this.parentFragmentManager, "DATE_PICKER")
 
         picker.addOnPositiveButtonClickListener {
-            viewModel.changeDate(picker.headerText)
+            viewModel.changeDate(it as Long)
         }
     }
 
@@ -129,12 +129,16 @@ class TaskListFragment : Fragment() {
 
     private fun totalTasks(uiState: TaskListViewModel.UiState) {
         val totalUncompletedTasks = uiState.uncompletedTasks.size
-        val totalCompleted =  uiState.completedTasks.size
+        val totalCompleted = uiState.completedTasks.size
 
         if (totalUncompletedTasks == 0 && totalCompleted == 0)
             binding.total.text = getString(R.string.no_notes)
         else
-            binding.total.text = getString(R.string.total_notes, totalUncompletedTasks.toString(), totalCompleted.toString())
+            binding.total.text = getString(
+                R.string.total_notes,
+                totalUncompletedTasks.toString(),
+                totalCompleted.toString()
+            )
     }
 
     override fun onDestroyView() {
