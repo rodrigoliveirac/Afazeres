@@ -1,6 +1,9 @@
 package com.rodcollab.afazeres.collections
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.graphics.Color
 import androidx.fragment.app.Fragment
 import android.os.Build
 import android.os.Bundle
@@ -47,7 +50,23 @@ class TaskListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
+        createChannel(getString(R.string.channelId), getString(R.string.channelName))
         return binding.root
+    }
+
+    private fun createChannel(channelId:String,channelName:String) {
+        val notificationChannel = NotificationChannel(
+            channelId, channelName, NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            setShowBadge(false)
+        }
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.RED
+        notificationChannel.enableVibration(true)
+        notificationChannel.description = "Task reminder"
+        val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(notificationChannel)
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
