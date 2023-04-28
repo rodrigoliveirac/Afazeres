@@ -12,5 +12,7 @@
     <string name="incomplete">Incomplete</string>
     <string name="no_notes">You don\'t have tasks</string>
     <string name="total_notes">%s incomplete, %s completed</string>
+    <string name="channelId">afazeres_channel</string>
+    <string name="channelName">Afazeres</string>
 
 </resources>
