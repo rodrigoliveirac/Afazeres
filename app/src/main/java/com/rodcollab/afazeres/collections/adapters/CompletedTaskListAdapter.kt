@@ -52,7 +52,7 @@ class CompletedTaskListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
-            return oldItem.isCompleted == newItem.isCompleted
+            return oldItem == newItem
         }
     }
 }
