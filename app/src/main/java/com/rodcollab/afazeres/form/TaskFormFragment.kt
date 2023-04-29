@@ -166,7 +166,7 @@ class TaskFormFragment : Fragment() {
             }
         }
 
-        alertDialog.setNegativeButton("Cancel") { dialog, _ ->
+        alertDialog.setNegativeButton("Cancel") { _, _ ->
             viewModel.alarmStatus(false)
         }
 

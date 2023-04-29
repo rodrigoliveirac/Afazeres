@@ -1,12 +1,8 @@
 package com.rodcollab.afazeres.collections
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.*
-import com.rodcollab.afazeres.collections.domain.DeleteTaskUseCase
-import com.rodcollab.afazeres.collections.domain.GetCompletedTasksUseCase
-import com.rodcollab.afazeres.collections.domain.GetUncompletedTasksUseCase
-import com.rodcollab.afazeres.collections.domain.OnToggleTaskCompletedUseCase
+import com.rodcollab.afazeres.collections.domain.*
 import com.rodcollab.afazeres.collections.model.TaskItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -42,7 +38,6 @@ class TaskListViewModel @Inject constructor (
             uiState.value?.let { currentState ->
                 uiState.value =
                     currentState.copy(uncompletedTasks = tasks.filter { it.date ==  currentState.dateToGetTasks })
-                Log.d("task_list", currentState.dateToGetTasks)
             }
         }.launchIn(viewModelScope)
     }
