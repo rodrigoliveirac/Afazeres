@@ -21,9 +21,13 @@ abstract class CollectionsModule {
 
     @Singleton
     @Binds
-    abstract fun providesToggleCompletedTaskUseCase(impl: OnToggleTaskCompletedUseCaseImpl) : OnToggleTaskCompletedUseCase
+    abstract fun providesToggleCompletedTaskUseCase(impl: OnToggleTaskCompletedUseCaseImpl): OnToggleTaskCompletedUseCase
 
     @Singleton
     @Binds
-    abstract fun providesDeleteTaskUseCase(impl: DeleteTaskUseCaseImpl) : DeleteTaskUseCase
+    abstract fun providesDeleteTaskUseCase(impl: DeleteTaskUseCaseImpl): DeleteTaskUseCase
+
+    @Singleton
+    @Binds
+    abstract fun providesTasksWithAlarm(impl: GetTasksWithAlarmUseCaseImpl): GetTasksWithAlarmUseCase
 }
