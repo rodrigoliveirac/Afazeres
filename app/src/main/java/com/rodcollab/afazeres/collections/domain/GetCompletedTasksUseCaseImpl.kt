@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class GetCompletedTasksUseCaseImpl @Inject constructor(private val tasksRepository: TasksRepository) :
     GetCompletedTasksUseCase {
-    override fun invoke(): Flow<List<TaskItem>> {
-        return tasksRepository.completedTasks().map {
+    override suspend fun invoke(date: String): Flow<List<TaskItem>> {
+        return tasksRepository.completedTasks(date).map {
             it.map { task ->
                 TaskItem(
                     id = task.taskId,
