@@ -8,17 +8,22 @@ import javax.inject.Inject
 
 class GetTasksWithAlarmUseCaseImpl @Inject constructor(private val tasks: TasksRepository) :
     GetTasksWithAlarmUseCase {
-    override suspend fun invoke(): Flow<List<TaskItem>> {
-        return tasks.uncompletedTasks().map { tasks ->
-            tasks.filter { it.alarmActive }.map {
-                TaskItem(
-                    id = it.taskId,
-                    title = it.taskTitle,
-                    category = it.taskCategory,
-                    isCompleted = it.isCompleted,
-                    date = it.taskDate
-                )
-            }
+    override suspend fun invoke(date: String): Flow<List<TaskItem>> {
+        return tasks.uncompletedTasks(date).map { tasks ->
+            tasks
+                .filter { it.alarmActive }
+                .map {
+                    TaskItem(
+                        id = it.taskId,
+                        title = it.taskTitle,
+                        category = it.taskCategory,
+                        isCompleted = it.isCompleted,
+                        date = it.taskDate,
+                        triggerTime = it.triggerTime,
+                        reminderTime = it.reminderTime
+                    )
+                }
         }
     }
 }
+
