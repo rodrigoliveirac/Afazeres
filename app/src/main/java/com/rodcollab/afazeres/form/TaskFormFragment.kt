@@ -243,6 +243,7 @@ class TaskFormFragment : Fragment() {
         picker.addOnPositiveButtonClickListener {
 
             viewModel.updateDatePicked(it as Long)
+            Log.d("date_picked", it.toString())
             binding.dateEditText.setText(picker.headerText)
         }
 
@@ -284,4 +285,33 @@ class TaskFormFragment : Fragment() {
 
         _binding = null
     }
+//    fun startDateSelectionPicker() {
+//        try {
+//            val picker = MaterialDatePicker.Builder.datePicker()
+//                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+//                .setTheme(R.style.CustomDatePickerDialog)
+//                .build()
+//            picker.addOnPositiveButtonClickListener { selection: Long? ->
+//                val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+//                utc.timeInMillis = selection!!
+//                val date: String =
+//                    ToolsManager.calendarToDate(this, utc, ToolsManager.LETY_FILTRATION_DATE_FORMAT)
+//                binding.textview.setText(date)
+//            }
+//            picker.show(getSupportFragmentManager(), picker.tag)
+//        } catch (e: IllegalArgumentException) {
+//        }
+//    }
+
+//    fun calendarToDate(context: Context, calendar: Calendar?, dateFormat: String?): String? {
+//        if (calendar == null) {
+//            return null
+//        }
+//        val locale: Locale = context.getResources().getConfiguration().locale
+//        val df: DateFormat = SimpleDateFormat(dateFormat, locale)
+//        val timeZone = TimeZone.getTimeZone("UTC")
+//        df.setTimeZone(timeZone)
+//        val d = calendar.time
+//        return df.format(d)
+//    }
 }

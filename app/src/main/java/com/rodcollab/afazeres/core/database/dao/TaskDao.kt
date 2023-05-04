@@ -16,6 +16,9 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE task_isCompleted = 0 AND task_date LIKE '%'||:date||'%'")
     fun fetchUncompletedTasks(date: String): Flow<List<Task>>
 
+    @Query("SELECT * FROM tasks WHERE task_alarmActive = 1")
+    fun fetchTasksWithAlarm() : Flow<List<Task>>
+
     @Query("SELECT * FROM tasks WHERE task_isCompleted = 1 AND task_date LIKE '%'||:date||'%'")
     fun fetchCompletedTasks(date:String): Flow<List<Task>>
 

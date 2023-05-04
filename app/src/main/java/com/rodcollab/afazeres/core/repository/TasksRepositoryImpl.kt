@@ -47,6 +47,24 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         }
     }
 
+    override fun tasksWithAlarm(): Flow<List<TaskDomain>> {
+        return dao.fetchTasksWithAlarm().map { tasks ->
+            tasks.map {
+                TaskDomain(
+                    taskId = it.uuid,
+                    taskTitle = it.title,
+                    taskCategory = it.category,
+                    taskDate = it.date,
+                    taskTime = it.time,
+                    isCompleted = it.isCompleted,
+                    alarmActive = it.alarmActive,
+                    reminderTime = it.reminderTime,
+                    triggerTime = it.triggerTime
+                )
+            }
+        }
+    }
+
     override suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int) {
 
         dao.onToggleChecked(taskId, isCompleted)

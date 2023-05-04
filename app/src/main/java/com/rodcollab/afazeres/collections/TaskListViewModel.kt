@@ -92,7 +92,7 @@ class TaskListViewModel @Inject constructor(
     private fun getTasksWithAlarm() {
 
         getTasksJob =
-            getTasksWithAlarmUseCase(uiState.value?.dateToGetTasks.toString()).onEach { tasks ->
+            getTasksWithAlarmUseCase().onEach { tasks ->
 
                 tasks.onEach { task ->
 
