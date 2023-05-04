@@ -95,25 +95,30 @@ class TaskListViewModel @Inject constructor(
             getTasksWithAlarmUseCase().onEach { tasks ->
 
                 tasks.onEach { task ->
+                    alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
                     alarmIntent.putExtra("title", task.title)
                     alarmIntent.putExtra("category", task.category)
                     alarmIntent.putExtra("reminder_time", toString(task.reminderTime!!))
 
-                    alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
                     pendingIntent = PendingIntent.getBroadcast(
                         app,
                         task.hashCode(),
                         alarmIntent,
-                        PendingIntent.FLAG_MUTABLE
+                        PendingIntent.FLAG_ONE_SHOT
                     )
+
+
                     task.triggerTime?.let { triggerTime ->
-                        alarmManager.setAndAllowWhileIdle(
-                            AlarmManager.RTC_WAKEUP,
-                            triggerTime,
-                            pendingIntent
-                        )
+                        if (triggerTime < System.currentTimeMillis()) {
+                            alarmManager.cancel(pendingIntent)
+                        } else {
+                            alarmManager.setAndAllowWhileIdle(
+                                AlarmManager.RTC_WAKEUP,
+                                triggerTime,
+                                pendingIntent
+                            )
+                        }
                     }
 
                 }

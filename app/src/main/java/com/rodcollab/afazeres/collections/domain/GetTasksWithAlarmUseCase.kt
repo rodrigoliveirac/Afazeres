@@ -4,5 +4,5 @@ import com.rodcollab.afazeres.collections.model.TaskItem
 import kotlinx.coroutines.flow.Flow
 
 interface GetTasksWithAlarmUseCase {
-    operator fun invoke(date: String): Flow<List<TaskItem>>
+    operator fun invoke(): Flow<List<TaskItem>>
 }
