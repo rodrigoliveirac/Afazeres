@@ -100,12 +100,11 @@ class TaskListViewModel @Inject constructor(
                     alarmIntent.putExtra("category", task.category)
                     alarmIntent.putExtra("reminder_time", toString(task.reminderTime!!))
 
-                    alarmManager =
-                        app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                    alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
                     pendingIntent = PendingIntent.getBroadcast(
                         app,
-                        0,
+                        task.hashCode(),
                         alarmIntent,
                         PendingIntent.FLAG_MUTABLE
                     )
