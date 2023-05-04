@@ -14,5 +14,6 @@
     <string name="total_notes">%s incomplete, %s completed</string>
     <string name="channelId">afazeres_channel</string>
     <string name="channelName">Afazeres</string>
+    <string name="task_notification_channel_description">Task Reminder</string>
 
 </resources>

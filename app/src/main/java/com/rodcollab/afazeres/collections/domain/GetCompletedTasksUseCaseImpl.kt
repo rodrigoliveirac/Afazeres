@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetCompletedTasksUseCaseImpl @Inject constructor(private val tasksRepository: TasksRepository) :
     GetCompletedTasksUseCase {
-    override suspend fun invoke(date: String): Flow<List<TaskItem>> {
+    override fun invoke(date: String): Flow<List<TaskItem>> {
         return tasksRepository.completedTasks(date).map {
             it.map { task ->
                 TaskItem(
@@ -16,7 +16,9 @@ class GetCompletedTasksUseCaseImpl @Inject constructor(private val tasksReposito
                     title = task.taskTitle,
                     category = task.taskCategory,
                     date = task.taskDate,
-                    isCompleted = task.isCompleted
+                    isCompleted = task.isCompleted,
+                    triggerTime = task.triggerTime,
+                    reminderTime = task.reminderTime
                 )
             }
         }

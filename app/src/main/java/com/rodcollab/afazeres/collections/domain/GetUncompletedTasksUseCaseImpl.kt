@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetUncompletedTasksUseCaseImpl @Inject constructor(private val tasksRepository: TasksRepository) : GetUncompletedTasksUseCase {
-    override suspend fun invoke(date: String): Flow<List<TaskItem>> {
+    override fun invoke(date: String): Flow<List<TaskItem>> {
         return tasksRepository.uncompletedTasks(date).map { tasks ->
             tasks.map { task ->
                 TaskItem(
@@ -15,7 +15,9 @@ class GetUncompletedTasksUseCaseImpl @Inject constructor(private val tasksReposi
                     title = task.taskTitle,
                     category = task.taskCategory,
                     date = task.taskDate,
-                    isCompleted = task.isCompleted
+                    isCompleted = task.isCompleted,
+                    triggerTime = task.triggerTime,
+                    reminderTime = task.reminderTime
                 )
             }
         }
