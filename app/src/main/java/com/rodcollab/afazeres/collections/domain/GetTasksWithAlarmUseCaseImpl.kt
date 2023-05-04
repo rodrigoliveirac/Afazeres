@@ -18,7 +18,8 @@ class GetTasksWithAlarmUseCaseImpl @Inject constructor(private val tasks: TasksR
                         isCompleted = it.isCompleted,
                         date = it.taskDate,
                         triggerTime = it.triggerTime,
-                        reminderTime = it.reminderTime
+                        reminderTime = it.reminderTime,
+                        createdAt = it.createdAt
                     )
                 }
         }

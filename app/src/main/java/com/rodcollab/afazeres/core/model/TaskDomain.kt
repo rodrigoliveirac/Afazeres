@@ -9,5 +9,6 @@ data class TaskDomain(
     val isCompleted: Boolean,
     val alarmActive: Boolean,
     val reminderTime: Long?,
-    val triggerTime:Long?
+    val triggerTime:Long?,
+    val createdAt: Long
 )

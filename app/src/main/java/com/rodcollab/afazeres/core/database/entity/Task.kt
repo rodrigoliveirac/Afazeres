@@ -9,6 +9,7 @@ import com.rodcollab.afazeres.core.database.BooleanToIntConverter
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey val uuid: String,
+    @ColumnInfo(name = "createdAt") val createdAt: Long,
     @ColumnInfo(name = "task_title") val title: String,
     @ColumnInfo(name = "task_category") val category: String,
     @ColumnInfo(name = "task_date") val date: String,

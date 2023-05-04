@@ -18,7 +18,8 @@ class GetCompletedTasksUseCaseImpl @Inject constructor(private val tasksReposito
                     date = task.taskDate,
                     isCompleted = task.isCompleted,
                     triggerTime = task.triggerTime,
-                    reminderTime = task.reminderTime
+                    reminderTime = task.reminderTime,
+                    createdAt = task.createdAt
                 )
             }
         }

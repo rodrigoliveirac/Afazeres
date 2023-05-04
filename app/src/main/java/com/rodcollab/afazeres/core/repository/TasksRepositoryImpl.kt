@@ -23,7 +23,8 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     isCompleted = it.isCompleted,
                     alarmActive = it.alarmActive,
                     reminderTime = it.reminderTime,
-                    triggerTime = it.triggerTime
+                    triggerTime = it.triggerTime,
+                    createdAt = it.createdAt
                 )
             }
         }
@@ -41,7 +42,8 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     isCompleted = it.isCompleted,
                     alarmActive = it.alarmActive,
                     reminderTime = it.reminderTime,
-                    triggerTime = it.triggerTime
+                    triggerTime = it.triggerTime,
+                    createdAt = it.createdAt
                 )
             }
         }
@@ -59,7 +61,8 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     isCompleted = it.isCompleted,
                     alarmActive = it.alarmActive,
                     reminderTime = it.reminderTime,
-                    triggerTime = it.triggerTime
+                    triggerTime = it.triggerTime,
+                    createdAt = it.createdAt
                 )
             }
         }
@@ -89,7 +92,8 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
             isCompleted = false,
             alarmActive = alarmActive,
             reminderTime = reminderTime,
-            triggerTime = triggerTime
+            triggerTime = triggerTime,
+            createdAt = System.currentTimeMillis()
         )
         Log.d("newTask", newTask.toString())
         dao.insert(
