@@ -83,7 +83,7 @@ class TaskListViewModel @Inject constructor(
             getUncompletedTasksUseCase(uiState.value?.dateToGetTasks.toString()).onEach { uncompletedTasks ->
                 uiState.value?.let { currentState ->
                     uiState.value =
-                        currentState.copy(uncompletedTasks = uncompletedTasks)
+                        currentState.copy(uncompletedTasks = uncompletedTasks.sortedByDescending { it.createdAt })
                 }
                 Log.d("uncompleted_tasks", uiState.value?.uncompletedTasks.toString())
             }.launchIn(viewModelScope)
@@ -130,7 +130,7 @@ class TaskListViewModel @Inject constructor(
             .onEach { completedTasks ->
                 uiState.value?.let { currentState ->
                     uiState.value =
-                        currentState.copy(completedTasks = completedTasks)
+                        currentState.copy(completedTasks = completedTasks.sortedByDescending { it.createdAt })
                 }
             }.launchIn(viewModelScope)
     }
