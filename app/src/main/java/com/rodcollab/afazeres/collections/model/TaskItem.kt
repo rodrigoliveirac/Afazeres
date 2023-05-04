@@ -5,5 +5,7 @@ data class TaskItem(
     val title: String,
     val category: String,
     val isCompleted: Boolean,
-    var date: String,
+    val date: String,
+    val triggerTime: Long?,
+    val reminderTime: Long?,
 )
