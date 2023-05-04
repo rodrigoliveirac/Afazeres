@@ -1,17 +1,12 @@
 package com.rodcollab.afazeres.collections
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.graphics.Color
-import androidx.fragment.app.Fragment
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,7 +19,6 @@ import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 @AndroidEntryPoint
 class TaskListFragment : Fragment() {
 
@@ -50,23 +44,7 @@ class TaskListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
-        createChannel(getString(R.string.channelId), getString(R.string.channelName))
         return binding.root
-    }
-
-    private fun createChannel(channelId:String,channelName:String) {
-        val notificationChannel = NotificationChannel(
-            channelId, channelName, NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            setShowBadge(false)
-        }
-        notificationChannel.enableLights(true)
-        notificationChannel.lightColor = Color.RED
-        notificationChannel.enableVibration(true)
-        notificationChannel.description = "Task reminder"
-        val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(notificationChannel)
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -116,7 +94,6 @@ class TaskListFragment : Fragment() {
     private fun setupUncompletedTasksAdapter() {
         binding.taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.taskRecyclerView.adapter = adapterUncompletedTasks
-
         val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapterUncompletedTasks))
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
     }
@@ -162,8 +139,6 @@ class TaskListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.taskRecyclerView.adapter = null
-        binding.taskRecyclerViewCompleted.adapter = null
         _binding = null
     }
 }

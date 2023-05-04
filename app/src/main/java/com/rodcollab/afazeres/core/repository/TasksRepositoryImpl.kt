@@ -1,5 +1,6 @@
 package com.rodcollab.afazeres.core.repository
 
+import android.util.Log
 import com.rodcollab.afazeres.core.database.dao.TaskDao
 import com.rodcollab.afazeres.core.database.entity.Task
 import com.rodcollab.afazeres.core.model.TaskDomain
@@ -10,8 +11,8 @@ import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksRepository {
 
-    override fun uncompletedTasks(): Flow<List<TaskDomain>> {
-        return dao.fetchUncompletedTasks().map { tasks ->
+    override fun uncompletedTasks(date: String): Flow<List<TaskDomain>> {
+        return dao.fetchUncompletedTasks(date).map { tasks ->
             tasks.map {
                 TaskDomain(
                     taskId = it.uuid,
@@ -28,8 +29,8 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         }
     }
 
-    override fun completedTasks(): Flow<List<TaskDomain>> {
-        return dao.fetchCompletedTasks().map { tasks ->
+    override fun completedTasks(date: String): Flow<List<TaskDomain>> {
+        return dao.fetchCompletedTasks(date).map { tasks ->
             tasks.map {
                 TaskDomain(
                     taskId = it.uuid,
@@ -40,7 +41,7 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
                     isCompleted = it.isCompleted,
                     alarmActive = it.alarmActive,
                     reminderTime = it.reminderTime,
-                    triggerTime =  it.triggerTime
+                    triggerTime = it.triggerTime
                 )
             }
         }
@@ -61,36 +62,36 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         triggerTime: Long?,
     ) {
 
-        dao.insert(
-
-            Task(
-                uuid = UUID.randomUUID().toString(),
-                title = taskTitle,
-                category = taskCategory,
-                date = convertDate(taskDate),
-                time = taskTime,
-                isCompleted = false,
-                alarmActive = alarmActive,
-                reminderTime = reminderTime,
-                 triggerTime = triggerTime
-            )
+        val newTask = Task(
+            uuid = UUID.randomUUID().toString(),
+            title = taskTitle,
+            category = taskCategory,
+            date = convertDate(taskDate),
+            time = taskTime,
+            isCompleted = false,
+            alarmActive = alarmActive,
+            reminderTime = reminderTime,
+            triggerTime = triggerTime
         )
+        Log.d("newTask", newTask.toString())
+        dao.insert(
+            newTask
+        )
+
     }
 
     private fun convertDate(taskDate: Long?): String {
         val day = taskDate?.let { getDayMonthYear(it)[0] }
-        val month = taskDate?.let { getDayMonthYear(taskDate)[1] }
-        val year = taskDate?.let { getDayMonthYear(taskDate)[2] }
+        val month = taskDate?.let { getDayMonthYear(it)[1] }
+        val year = taskDate?.let { getDayMonthYear(it)[2] }
         return "$day/$month/$year"
     }
 
     private fun getDayMonthYear(taskDate: Long): Array<String> {
-        val date = Date()
-        date.time = taskDate
         val calendarInstance = Calendar.getInstance()
-        calendarInstance.time = date
-        val day = (calendarInstance.get(Calendar.DAY_OF_MONTH) + 1).toString().padStart(2, '0')
-        val month = (calendarInstance.get(Calendar.MONTH) + 1).toString().padStart(2,'0')
+        calendarInstance.timeInMillis = taskDate
+        val day = (calendarInstance.get(Calendar.DAY_OF_MONTH)).toString().padStart(2, '0')
+        val month = (calendarInstance.get(Calendar.MONTH) + 1).toString().padStart(2, '0')
         val year = calendarInstance.get(Calendar.YEAR).toString()
         return arrayOf(day, month, year)
     }
