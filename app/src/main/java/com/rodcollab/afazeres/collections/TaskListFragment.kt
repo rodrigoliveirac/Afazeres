@@ -84,7 +84,9 @@ class TaskListFragment : Fragment() {
         viewModel
             .stateOnceAndStream()
             .observe(viewLifecycleOwner) {
-                bindUiState(it)
+                CoroutineScope(Dispatchers.Main).launch {
+                    bindUiState(it)
+                }
             }
     }
 
