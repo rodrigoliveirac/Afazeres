@@ -13,14 +13,14 @@ interface TaskDao {
     @Query("UPDATE tasks SET task_isCompleted=:isCompleted WHERE uuid = :taskId")
     suspend fun onToggleChecked(taskId: String, isCompleted: Int)
 
-    @Query("SELECT * FROM tasks WHERE task_isCompleted = 0 AND task_date LIKE '%'||:date||'%'")
-    fun fetchUncompletedTasks(date: String): Flow<List<Task>>
+    @Query("SELECT * FROM tasks WHERE task_isCompleted = 0 AND task_date LIKE '%'||:date||'%' ORDER BY createdAt DESC")
+    suspend fun fetchUncompletedTasks(date: String): List<Task>
+
+    @Query("SELECT * FROM tasks WHERE task_isCompleted = 1 AND task_date LIKE '%'||:date||'%' ORDER BY createdAt DESC")
+    suspend fun fetchCompletedTasks(date:String): List<Task>
 
     @Query("SELECT * FROM tasks WHERE task_alarmActive = 1")
     fun fetchTasksWithAlarm() : Flow<List<Task>>
-
-    @Query("SELECT * FROM tasks WHERE task_isCompleted = 1 AND task_date LIKE '%'||:date||'%'")
-    fun fetchCompletedTasks(date:String): Flow<List<Task>>
 
     @Insert
     suspend fun insert(task: Task)

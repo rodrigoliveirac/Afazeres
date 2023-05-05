@@ -31,8 +31,6 @@ class TaskListViewModel @Inject constructor(
     private val getUncompletedTasksUseCase: GetUncompletedTasksUseCase
 ) : AndroidViewModel(app) {
 
-    private var getTasksJob: Job? = null
-
     private lateinit var alarmManager: AlarmManager
 
     private var alarmIntent = Intent(app, AlarmReceiver::class.java)
@@ -69,75 +67,66 @@ class TaskListViewModel @Inject constructor(
         return uiState
     }
 
-    private fun getTasks() {
-
-        getUncompletedTasks()
-        getCompletedTasks()
-
+    private fun tasksWithAlarm() {
         getTasksWithAlarm()
 
     }
 
-    private fun getUncompletedTasks() {
-        getTasksJob =
-            getUncompletedTasksUseCase(uiState.value?.dateToGetTasks.toString()).onEach { uncompletedTasks ->
-                uiState.value?.let { currentState ->
-                    uiState.value =
-                        currentState.copy(uncompletedTasks = uncompletedTasks.sortedByDescending { it.createdAt })
-                }
-                Log.d("uncompleted_tasks", uiState.value?.uncompletedTasks.toString())
-            }.launchIn(viewModelScope)
+    private fun refreshTasks() {
+
+        viewModelScope.launch {
+            uiState.value?.let { state ->
+                uiState.postValue(
+                    UiState(
+                        uncompletedTasks = getUncompletedTasksUseCase(state.dateToGetTasks),
+                        completedTasks = getCompletedTasksUseCase(state.dateToGetTasks),
+                        dateToGetTasks = state.dateToGetTasks,
+                        date = state.date
+                    )
+                )
+                Log.d("uncompleted_tasks", state.uncompletedTasks.toString())
+            }
+        }
+
     }
 
     private fun getTasksWithAlarm() {
+        getTasksWithAlarmUseCase().onEach { tasks ->
 
-        getTasksJob =
-            getTasksWithAlarmUseCase().onEach { tasks ->
+            tasks.onEach { task ->
+                alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-                tasks.onEach { task ->
-                    alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmIntent.putExtra("title", task.title)
+                alarmIntent.putExtra("category", task.category)
+                alarmIntent.putExtra("reminder_time", toString(task.reminderTime!!))
 
-                    alarmIntent.putExtra("title", task.title)
-                    alarmIntent.putExtra("category", task.category)
-                    alarmIntent.putExtra("reminder_time", toString(task.reminderTime!!))
-
-                    pendingIntent = PendingIntent.getBroadcast(
-                        app,
-                        task.hashCode(),
-                        alarmIntent,
-                        PendingIntent.FLAG_ONE_SHOT
-                    )
+                pendingIntent = PendingIntent.getBroadcast(
+                    app,
+                    task.hashCode(),
+                    alarmIntent,
+                    PendingIntent.FLAG_ONE_SHOT
+                )
 
 
-                    task.triggerTime?.let { triggerTime ->
-                        if (triggerTime < System.currentTimeMillis()) {
-                            alarmManager.cancel(pendingIntent)
-                        } else {
-                            alarmManager.setAndAllowWhileIdle(
-                                AlarmManager.RTC_WAKEUP,
-                                triggerTime,
-                                pendingIntent
-                            )
-                        }
+                task.triggerTime?.let { triggerTime ->
+                    if (triggerTime < System.currentTimeMillis()) {
+                        alarmManager.cancel(pendingIntent)
+                    } else {
+                        alarmManager.setAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,
+                            triggerTime,
+                            pendingIntent
+                        )
                     }
-
                 }
-            }.launchIn(viewModelScope)
-    }
 
-    private fun getCompletedTasks() {
-        getTasksJob = getCompletedTasksUseCase(uiState.value?.dateToGetTasks.toString())
-            .onEach { completedTasks ->
-                uiState.value?.let { currentState ->
-                    uiState.value =
-                        currentState.copy(completedTasks = completedTasks.sortedByDescending { it.createdAt })
-                }
-            }.launchIn(viewModelScope)
+            }
+        }.launchIn(viewModelScope)
     }
 
     fun onResume() {
-
-        getTasks()
+        refreshTasks()
+        tasksWithAlarm()
         Log.d("header_date", uiState.value?.dateToGetTasks.toString())
     }
 
@@ -146,20 +135,26 @@ class TaskListViewModel @Inject constructor(
         viewModelScope.launch {
             val checkedInt = if (!isCompleted) 1 else 0
             onToggleTaskCompletedUseCase(id, checkedInt)
+            withContext(Dispatchers.Main) {
+                refreshTasks()
+            }
         }
+
     }
 
     fun changeDate(value: Long) {
         viewModelScope.launch {
-            uiState.value?.let { currentUiState ->
-                uiState.value = currentUiState.copy(
-                    date = getStringFrom(value),
-                    dateToGetTasks = getLocalDateFrom(value)
+            uiState.value?.let { state ->
+                uiState.postValue(
+                    UiState(
+                        uncompletedTasks = getUncompletedTasksUseCase(getLocalDateFrom(value)),
+                        completedTasks = getCompletedTasksUseCase(getLocalDateFrom(value)),
+                        dateToGetTasks = getLocalDateFrom(value),
+                        date = getStringFrom(value)
+                    )
                 )
             }
-            getTasks()
         }
-
     }
 
     private fun getLocalDateFrom(value: Long): String {
@@ -173,7 +168,8 @@ class TaskListViewModel @Inject constructor(
     private fun getStringFrom(value: Long): String {
         val calendar = getDate(value)
         val date = calendar.time
-        val formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
+        val formatter =
+            DateTimeFormatter.ofPattern("MMM dd, yyyy").withZone(ZoneId.systemDefault())
         return DateTimeFormatter.ofPattern("MMM dd, yyyy").format(
             LocalDate.parse(formatter.format(date.toInstant()).toString(), formatter)
         ).toString()
@@ -188,6 +184,9 @@ class TaskListViewModel @Inject constructor(
     fun deleteTask(id: String) {
         viewModelScope.launch {
             deleteTaskUseCase(id)
+            withContext(Dispatchers.Main) {
+                refreshTasks()
+            }
         }
     }
 

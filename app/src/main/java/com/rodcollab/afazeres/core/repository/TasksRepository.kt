@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface TasksRepository {
 
-    fun uncompletedTasks(date: String): Flow<List<TaskDomain>>
+    suspend fun uncompletedTasks(date: String): List<TaskDomain>
 
-    fun completedTasks(date: String): Flow<List<TaskDomain>>
+    suspend fun completedTasks(date: String): List<TaskDomain>
 
-    fun tasksWithAlarm() : Flow<List<TaskDomain>>
+    fun tasksWithAlarm(): Flow<List<TaskDomain>>
 
     suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int)
 

@@ -11,41 +11,37 @@ import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksRepository {
 
-    override fun uncompletedTasks(date: String): Flow<List<TaskDomain>> {
-        return dao.fetchUncompletedTasks(date).map { tasks ->
-            tasks.map {
-                TaskDomain(
-                    taskId = it.uuid,
-                    taskTitle = it.title,
-                    taskCategory = it.category,
-                    taskDate = it.date,
-                    taskTime = it.time,
-                    isCompleted = it.isCompleted,
-                    alarmActive = it.alarmActive,
-                    reminderTime = it.reminderTime,
-                    triggerTime = it.triggerTime,
-                    createdAt = it.createdAt
-                )
-            }
+    override suspend fun uncompletedTasks(date: String): List<TaskDomain> {
+        return dao.fetchUncompletedTasks(date).map {
+            TaskDomain(
+                taskId = it.uuid,
+                taskTitle = it.title,
+                taskCategory = it.category,
+                taskDate = it.date,
+                taskTime = it.time,
+                isCompleted = it.isCompleted,
+                alarmActive = it.alarmActive,
+                reminderTime = it.reminderTime,
+                triggerTime = it.triggerTime,
+                createdAt = it.createdAt
+            )
         }
     }
 
-    override fun completedTasks(date: String): Flow<List<TaskDomain>> {
-        return dao.fetchCompletedTasks(date).map { tasks ->
-            tasks.map {
-                TaskDomain(
-                    taskId = it.uuid,
-                    taskTitle = it.title,
-                    taskCategory = it.category,
-                    taskDate = it.date,
-                    taskTime = it.time,
-                    isCompleted = it.isCompleted,
-                    alarmActive = it.alarmActive,
-                    reminderTime = it.reminderTime,
-                    triggerTime = it.triggerTime,
-                    createdAt = it.createdAt
-                )
-            }
+    override suspend fun completedTasks(date: String): List<TaskDomain> {
+        return dao.fetchCompletedTasks(date).map {
+            TaskDomain(
+                taskId = it.uuid,
+                taskTitle = it.title,
+                taskCategory = it.category,
+                taskDate = it.date,
+                taskTime = it.time,
+                isCompleted = it.isCompleted,
+                alarmActive = it.alarmActive,
+                reminderTime = it.reminderTime,
+                triggerTime = it.triggerTime,
+                createdAt = it.createdAt
+            )
         }
     }
 
