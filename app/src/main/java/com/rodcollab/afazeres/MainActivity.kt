@@ -20,10 +20,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         setupNavigation()
+        if(navController.currentDestination?.id == R.id.FirstFragment) {
+            this.supportActionBar?.hide()
+        }
     }
 
     private fun setupNavigation() {
