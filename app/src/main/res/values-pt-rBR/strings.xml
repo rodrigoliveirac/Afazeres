@@ -10,4 +10,17 @@
     <string name="total_notes">%s afazeres, %s concluídos</string>
     <string name="accessibility_add">Adicionar Afazer</string>
     <string name="task_form">Criar Afazer</string>
+    <string name="date">Data</string>
+    <string name="time">Horário</string>
+    <string name="category_study">Estudo</string>
+    <string name="category_work">Trabalho</string>
+    <string name="category_personal">Pessoal</string>
+    <string name="set_alarm">Definir alarme</string>
+    <string name="one_hour_before">%s hora antes</string>
+    <string name="thirty_min_before">%s minutos antes</string>
+    <string name="fifty_min_before">%s minutos antes</string>
+    <string name="set_reminder">Definir alarme</string>
+    <string name="cancel_dialog">Cancelar</string>
+    <string name="remindMe_dialog_positiveBtn">Me lembre</string>
+    <string name="one_day_before">%s dia antes</string>
 </resources>

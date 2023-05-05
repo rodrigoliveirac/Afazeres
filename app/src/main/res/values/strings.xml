@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Afazeres</string>
-    <string name="task_title">Task title</string>
-    <string name="task_category">Task Category</string>
+    <string name="task_title">Title</string>
+    <string name="task_category">Category</string>
 
     <string name="save">To salve</string>
 
@@ -13,6 +13,19 @@
     <string name="channelId" translatable="false">afazeres_channel</string>
     <string name="channelName" translatable="false">Afazeres</string>
     <string name="task_notification_channel_description" translatable="false">Task Reminder</string>
-    <string name="task_form">Task Form</string>
+    <string name="task_form">Add Task</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="category_personal">Personal</string>
+    <string name="category_study">Study</string>
+    <string name="category_work">Work</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="one_hour_before">%s hour before</string>
+    <string name="thirty_min_before">%s min before</string>
+    <string name="fifty_min_before">%s min before</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="remindMe_dialog_positiveBtn">Remind me</string>
+    <string name="one_day_before">%s day before</string>
 
 </resources>

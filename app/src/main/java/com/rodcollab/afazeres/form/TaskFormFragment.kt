@@ -61,6 +61,12 @@ class TaskFormFragment : Fragment() {
         setupAlarmSwitch()
 
         setupSaveButton()
+
+        setDefaultCheck()
+    }
+
+    private fun setDefaultCheck() {
+        binding.categoryChipGroup.check(R.id.category_personal)
     }
 
     private fun setupSaveButton() {
@@ -140,13 +146,14 @@ class TaskFormFragment : Fragment() {
         alertDialog.setIcon(R.drawable.alarm_on)
 
         // title of the alert dialog
-        alertDialog.setTitle("Send Reminder")
+        alertDialog.setTitle(getString(R.string.set_reminder))
 
         val checkedItemDefault = 0
 
         val checkedItem = intArrayOf(checkedItemDefault)
 
-        val listItems = arrayOf("1 hour before", "30 min before", "15 min before")
+        val listItems = arrayOf(getString(R.string.one_hour_before, 1.toString()), getString(R.string.thirty_min_before, 30.toString()), getString(
+                    R.string.fifty_min_before, 15.toString()))
 
         alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { _, which ->
             checkedItem[0] = which
@@ -154,7 +161,7 @@ class TaskFormFragment : Fragment() {
         }
 
 
-        alertDialog.setPositiveButton("Remind me") { dialog, _ ->
+        alertDialog.setPositiveButton(getString(R.string.remindMe_dialog_positiveBtn)) { dialog, _ ->
             viewModel.alarmStatus(true)
             dialog.dismiss()
         }
@@ -166,7 +173,7 @@ class TaskFormFragment : Fragment() {
             }
         }
 
-        alertDialog.setNegativeButton("Cancel") { _, _ ->
+        alertDialog.setNegativeButton(getString(R.string.cancel_dialog)) { _, _ ->
             viewModel.alarmStatus(false)
         }
 
@@ -273,10 +280,11 @@ class TaskFormFragment : Fragment() {
     }
 
     private fun getCategoryValue() = when (binding.categoryChipGroup.checkedChipId) {
-        R.id.category_study -> "Study"
-        R.id.category_personal -> "Personal"
+        R.id.category_study -> getString(R.string.category_study)
+        R.id.category_personal -> getString(R.string.category_personal)
+        R.id.category_work -> getString(R.string.category_work)
         else -> {
-            "Work"
+            ""
         }
     }
 

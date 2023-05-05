@@ -42,7 +42,7 @@
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
-            android:hint="Date"
+            android:hint="@string/date"
             app:startIconDrawable="@drawable/ic_baseline_edit_calendar_24"
             app:startIconTint="#292B35"
             app:layout_constraintEnd_toStartOf="@id/time_text_input"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginEnd="@dimen/vertical_margin"
-            android:hint="Time"
+            android:hint="@string/time"
             app:startIconDrawable="@drawable/ic_time"
             app:startIconTint="#292B35"
             app:layout_constraintStart_toEndOf="@id/date_text_input"
@@ -106,7 +106,7 @@
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Category"/>
+                android:text="@string/task_category"/>
 
             <HorizontalScrollView
                 android:id="@+id/scroll_view"
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:text="Personal">
+                        android:text="@string/category_personal">
 
                     </com.google.android.material.chip.Chip>
 
@@ -143,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:text="Study">
+                        android:text="@string/category_study">
 
                     </com.google.android.material.chip.Chip>
 
@@ -153,7 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:text="Work">
+                        android:text="@string/category_work">
 
                     </com.google.android.material.chip.Chip>
 
@@ -180,7 +180,7 @@
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Set Alarm"/>
+                android:text="@string/set_alarm"/>
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/setAlarm_switch"
