@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Afazeres</string>
-    <string name="title_activity_main">My Tasks</string>
-    <string name="title_task_list">Task List</string>
     <string name="task_title">Task title</string>
     <string name="task_category">Task Category</string>
 
@@ -12,8 +10,9 @@
     <string name="incomplete">Incomplete</string>
     <string name="no_notes">You don\'t have tasks</string>
     <string name="total_notes">%s incomplete, %s completed</string>
-    <string name="channelId">afazeres_channel</string>
-    <string name="channelName">Afazeres</string>
-    <string name="task_notification_channel_description">Task Reminder</string>
+    <string name="channelId" translatable="false">afazeres_channel</string>
+    <string name="channelName" translatable="false">Afazeres</string>
+    <string name="task_notification_channel_description" translatable="false">Task Reminder</string>
+    <string name="task_form">Task Form</string>
 
 </resources>

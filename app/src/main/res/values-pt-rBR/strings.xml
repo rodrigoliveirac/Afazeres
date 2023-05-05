@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Afazeres</string>
+    <string name="task_title">Título</string>
+    <string name="task_category">Categoria</string>
+    <string name="save">Salvar</string>
+    <string name="completed">Concluídos</string>
+    <string name="incomplete">Afazeres</string>
+    <string name="no_notes">Nenhum afazer</string>
+    <string name="total_notes">%s afazeres, %s concluídos</string>
+    <string name="accessibility_add">Adicionar Afazer</string>
+    <string name="task_form">Criar Afazer</string>
+</resources>

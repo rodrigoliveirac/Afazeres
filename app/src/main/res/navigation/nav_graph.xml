@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/FirstFragment"
         android:name="com.rodcollab.afazeres.collections.TaskListFragment"
-        android:label="@string/title_task_list"
         tools:layout="@layout/fragment_task_list">
 
         <action
@@ -20,7 +19,7 @@
     <fragment
         android:id="@+id/taskFormFragment"
         android:name="com.rodcollab.afazeres.form.TaskFormFragment"
-        android:label="Task Form" />
+        android:label="@string/task_form" />
 
 
 </navigation>
