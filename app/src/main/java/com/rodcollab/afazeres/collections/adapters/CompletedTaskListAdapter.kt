@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rodcollab.afazeres.collections.TaskListViewModel
 import com.rodcollab.afazeres.collections.model.TaskItem
-import com.rodcollab.afazeres.databinding.TaskItemBinding
+import com.rodcollab.afazeres.databinding.TaskItemCompletedBinding
 
 class CompletedTaskListAdapter(
     private val viewModel: TaskListViewModel
@@ -18,7 +18,7 @@ class CompletedTaskListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = TaskItemBinding.inflate(layoutInflater, parent, false)
+        val binding = TaskItemCompletedBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding, viewModel)
     }
 
@@ -33,7 +33,7 @@ class CompletedTaskListAdapter(
     }
 
     class ViewHolder(
-        private val binding: TaskItemBinding,
+        private val binding: TaskItemCompletedBinding,
         private val viewModel: TaskListViewModel,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(habit: TaskItem) {
