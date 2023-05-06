@@ -19,6 +19,7 @@ import com.rodcollab.afazeres.collections.adapters.UncompletedTaskListAdapter
 import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import java.util.*
 
 @AndroidEntryPoint
 class TaskListFragment : Fragment() {
@@ -110,7 +111,13 @@ class TaskListFragment : Fragment() {
         picker.show(this.parentFragmentManager, "DATE_PICKER")
 
         picker.addOnPositiveButtonClickListener {
-            viewModel.changeDate(it as Long)
+            val timeZone = TimeZone.getDefault()
+            val date = Date(it as Long)
+            val utcMillis = date.time - timeZone.rawOffset
+            val calendar = Calendar.getInstance(timeZone)
+            calendar.timeInMillis = utcMillis
+            val localMillis = calendar.timeInMillis
+            viewModel.changeDate(localMillis)
         }
     }
 

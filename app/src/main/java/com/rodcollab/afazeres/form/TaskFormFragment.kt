@@ -152,14 +152,12 @@ class TaskFormFragment : Fragment() {
 
         val checkedItem = intArrayOf(checkedItemDefault)
 
-        val listItems = arrayOf(getString(R.string.one_hour_before, 1.toString()), getString(R.string.thirty_min_before, 30.toString()), getString(
-                    R.string.fifty_min_before, 15.toString()))
+        val listItems = arrayOf(getString(R.string.one_day_before, 1.toString()), getString(R.string.one_hour_before, 1.toString()), getString(R.string.thirty_min_before, 30.toString()))
 
         alertDialog.setSingleChoiceItems(listItems, checkedItem[0]) { _, which ->
             checkedItem[0] = which
             viewModel.reminderTime(listItems[which])
         }
-
 
         alertDialog.setPositiveButton(getString(R.string.remindMe_dialog_positiveBtn)) { dialog, _ ->
             viewModel.alarmStatus(true)
@@ -236,7 +234,7 @@ class TaskFormFragment : Fragment() {
         pickerTime.addOnPositiveButtonClickListener {
             val taskTime = formatTextTime(pickerTime.hour, pickerTime.minute)
             //TODO("test this later. you got he idea")
-           //  viewModel.updateTimePicked(pickerTime.hour,pickerTime.minute)
+            //  viewModel.updateTimePicked(pickerTime.hour,pickerTime.minute)
             binding.timeEditText.setText(taskTime)
         }
     }
@@ -248,17 +246,20 @@ class TaskFormFragment : Fragment() {
         picker.show(this.parentFragmentManager, "DATE_PICKER")
 
         picker.addOnPositiveButtonClickListener {
+            val timeZone = TimeZone.getDefault()
+            val date = Date(it as Long)
+            val utcMillis = date.time - timeZone.rawOffset
+            val calendar = Calendar.getInstance(timeZone)
+            calendar.timeInMillis = utcMillis
+            val localMillis = calendar.timeInMillis
 
-            viewModel.updateDatePicked(it as Long)
+            viewModel.updateDatePicked(localMillis)
             Log.d("date_picked", it.toString())
             binding.dateEditText.setText(picker.headerText)
         }
 
 
-
     }
-
-
 
 
     private fun onSave(isAlarmActive: Boolean, reminderTime: Long, taskDate: Long?) {
@@ -293,33 +294,4 @@ class TaskFormFragment : Fragment() {
 
         _binding = null
     }
-//    fun startDateSelectionPicker() {
-//        try {
-//            val picker = MaterialDatePicker.Builder.datePicker()
-//                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-//                .setTheme(R.style.CustomDatePickerDialog)
-//                .build()
-//            picker.addOnPositiveButtonClickListener { selection: Long? ->
-//                val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-//                utc.timeInMillis = selection!!
-//                val date: String =
-//                    ToolsManager.calendarToDate(this, utc, ToolsManager.LETY_FILTRATION_DATE_FORMAT)
-//                binding.textview.setText(date)
-//            }
-//            picker.show(getSupportFragmentManager(), picker.tag)
-//        } catch (e: IllegalArgumentException) {
-//        }
-//    }
-
-//    fun calendarToDate(context: Context, calendar: Calendar?, dateFormat: String?): String? {
-//        if (calendar == null) {
-//            return null
-//        }
-//        val locale: Locale = context.getResources().getConfiguration().locale
-//        val df: DateFormat = SimpleDateFormat(dateFormat, locale)
-//        val timeZone = TimeZone.getTimeZone("UTC")
-//        df.setTimeZone(timeZone)
-//        val d = calendar.time
-//        return df.format(d)
-//    }
 }
