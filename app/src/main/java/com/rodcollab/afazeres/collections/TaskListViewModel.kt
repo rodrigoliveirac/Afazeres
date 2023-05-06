@@ -37,6 +37,8 @@ class TaskListViewModel @Inject constructor(
 
     private lateinit var pendingIntent: PendingIntent
 
+    private var getTasksWithAlarmJob: Job? = null
+
     @SuppressLint("SimpleDateFormat")
     var simpleDateFormat = SimpleDateFormat("MMM dd, yyyy")
     private val uiState: MutableLiveData<UiState> by lazy {
@@ -91,7 +93,7 @@ class TaskListViewModel @Inject constructor(
     }
 
     private fun getTasksWithAlarm() {
-        getTasksWithAlarmUseCase().onEach { tasks ->
+         getTasksWithAlarmJob = getTasksWithAlarmUseCase().onEach { tasks ->
 
             tasks.onEach { task ->
                 alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -125,6 +127,7 @@ class TaskListViewModel @Inject constructor(
     }
 
     fun onResume() {
+        getTasksWithAlarmJob?.cancel()
         refreshTasks()
         tasksWithAlarm()
         Log.d("header_date", uiState.value?.dateToGetTasks.toString())

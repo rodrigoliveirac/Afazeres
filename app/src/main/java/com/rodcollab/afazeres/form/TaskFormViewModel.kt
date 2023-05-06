@@ -1,16 +1,18 @@
 package com.rodcollab.afazeres.form
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rodcollab.afazeres.R
 import com.rodcollab.afazeres.core.repository.TasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskFormViewModel @Inject constructor(private val repository: TasksRepository) : ViewModel() {
+class TaskFormViewModel @Inject constructor(private val app: Application, private val repository: TasksRepository) : AndroidViewModel(app) {
 
     private val uiState: MutableLiveData<UiState> by lazy {
         MutableLiveData<UiState>(
@@ -60,9 +62,9 @@ class TaskFormViewModel @Inject constructor(private val repository: TasksReposit
 
     private fun toLong(reminderTimeText: String): Long {
         return when (reminderTimeText) {
-            "1 hour before" -> 3600000L
-            "30 min before" -> 1800000L
-            "15 min before" -> 900000L
+            app.getString(R.string.one_day_before, 1.toString()) -> 86400000L
+            app.getString(R.string.one_hour_before, 1.toString()) -> 3600000L
+            app.getString(R.string.thirty_min_before, 30.toString()) -> 1800000L
             else -> {
                 0L
             }
