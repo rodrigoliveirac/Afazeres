@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "863123673033",
+    "project_id": "afazeres-e972e",
+    "storage_bucket": "afazeres-e972e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863123673033:android:bb66a72963d0204e072218",
+        "android_client_info": {
+          "package_name": "com.rodcollab.afazeres"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863123673033-dh9ovrkdn0co3r766ufb812t83b900r6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rodcollab.afazeres",
+            "certificate_hash": "74311470ebd92cdf3b75ffc412fe6cb2d2562061"
+          }
+        },
+        {
+          "client_id": "863123673033-9erfdfo6n0h4t4omfekl7hrnsu7scdmt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_67_1_AOChpHSpMDVD7LmyJ5fuQOC3e8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863123673033-9erfdfo6n0h4t4omfekl7hrnsu7scdmt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
