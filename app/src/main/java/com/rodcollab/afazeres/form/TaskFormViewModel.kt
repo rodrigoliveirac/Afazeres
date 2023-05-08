@@ -5,14 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.rodcollab.afazeres.R
 import com.rodcollab.afazeres.core.repository.TasksRepository
+import com.rodcollab.afazeres.util.TextUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskFormViewModel @Inject constructor(private val app: Application, private val repository: TasksRepository) : AndroidViewModel(app) {
+class TaskFormViewModel @Inject constructor(
+    private val app: Application,
+    private val repository: TasksRepository
+) : AndroidViewModel(app) {
 
     private val uiState: MutableLiveData<UiState> by lazy {
         MutableLiveData<UiState>(
@@ -55,18 +58,8 @@ class TaskFormViewModel @Inject constructor(private val app: Application, privat
     fun reminderTime(reminderTime: String) {
         viewModelScope.launch {
             uiState.value?.let { currentUiState ->
-                uiState.value = currentUiState.copy(reminderTime = toLong(reminderTime))
-            }
-        }
-    }
-
-    private fun toLong(reminderTimeText: String): Long {
-        return when (reminderTimeText) {
-            app.getString(R.string.one_day_before, 1.toString()) -> 86400000L
-            app.getString(R.string.one_hour_before, 1.toString()) -> 3600000L
-            app.getString(R.string.thirty_min_before, 30.toString()) -> 1800000L
-            else -> {
-                0L
+                uiState.value =
+                    currentUiState.copy(reminderTime = TextUtil.toLong(app.resources, reminderTime))
             }
         }
     }
@@ -82,7 +75,7 @@ class TaskFormViewModel @Inject constructor(private val app: Application, privat
 
         viewModelScope.launch {
 
-            val triggerTime = if(taskTime.toString() != "") getTriggerTime(
+            val triggerTime = if (taskTime.toString() != "") getTriggerTime(
                 taskDate,
                 getValueTimeInLong(taskTime.toString()),
                 reminderTime
