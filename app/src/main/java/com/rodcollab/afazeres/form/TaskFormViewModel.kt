@@ -17,9 +17,9 @@ class TaskFormViewModel @Inject constructor(
     private val repository: TasksRepository
 ) : AndroidViewModel(app) {
 
-    private val uiState: MutableLiveData<UiState> by lazy {
-        MutableLiveData<UiState>(
-            UiState(
+    private val uiState: MutableLiveData<FormUiState> by lazy {
+        MutableLiveData<FormUiState>(
+            FormUiState(
                 datePicked = 0L,
                 timePicked = 0L,
                 alarmActive = false,
@@ -28,22 +28,15 @@ class TaskFormViewModel @Inject constructor(
         )
     }
 
-    fun stateOnceAndStream(): LiveData<UiState> {
+    fun stateOnceAndStream(): LiveData<FormUiState> {
         return uiState
     }
-
-    data class UiState(
-        val datePicked: Long?,
-        val timePicked: Long,
-        val alarmActive: Boolean,
-        val reminderTime: Long
-    )
 
     fun alarmStatus(alarmActive: Boolean) {
         viewModelScope.launch {
             uiState.postValue(
                 uiState.value?.let {
-                    UiState(
+                    FormUiState(
                         datePicked = it.datePicked,
                         timePicked = it.timePicked,
                         alarmActive = alarmActive,
@@ -77,7 +70,7 @@ class TaskFormViewModel @Inject constructor(
 
             val triggerTime = if (taskTime.toString() != "") getTriggerTime(
                 taskDate,
-                getValueTimeInLong(taskTime.toString()),
+                TextUtil.getValueTimeInLong(taskTime.toString()),
                 reminderTime
             ) else null
 
@@ -90,22 +83,6 @@ class TaskFormViewModel @Inject constructor(
                 reminderTime = reminderTime,
                 triggerTime = triggerTime
             )
-        }
-
-    }
-
-    private fun getValueTimeInLong(textFromView: CharSequence): Long {
-
-        val hourIndex = 0
-        return textFromView.toString().split(":").mapIndexed { hour, text ->
-            when (hour) {
-                hourIndex -> text.toLong() * 3600000L
-                else -> {
-                    text.toLong() * 60000L
-                }
-            }
-        }.sumOf { totalTime ->
-            totalTime
         }
 
     }
@@ -125,7 +102,7 @@ class TaskFormViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.postValue(
                 uiState.value?.let {
-                    UiState(
+                    FormUiState(
                         datePicked = it.datePicked,
                         timePicked = it.timePicked,
                         alarmActive = it.alarmActive,
