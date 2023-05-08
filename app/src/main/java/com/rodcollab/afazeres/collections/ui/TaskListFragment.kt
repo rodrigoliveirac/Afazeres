@@ -117,19 +117,15 @@ class TaskListFragment : Fragment() {
     }
 
     private fun bindUiState(uiState: UiState) {
-
-
-        totalTasks(uiState)
+        setupTotalTasksTextView(uiState)
 
         binding.currentDate.text = uiState.currentDateSelectedTextView
 
         adapterUncompletedTasks.updateTasks(uiState.uncompletedTasks)
         adapterCompletedTasks.updateTasks(uiState.completedTasks)
-
-
     }
 
-    private fun totalTasks(uiState: UiState) {
+    private fun setupTotalTasksTextView(uiState: UiState) {
         val totalUncompletedTasks = uiState.uncompletedTasks.size
         val totalCompleted = uiState.completedTasks.size
 
