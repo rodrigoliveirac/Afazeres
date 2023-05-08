@@ -16,6 +16,15 @@ object DateUtil {
     @SuppressLint("SimpleDateFormat")
     fun simpleDateFormat(): String = SimpleDateFormat("MMM dd, yyyy").format(Calendar.getInstance().time)
 
+    fun getValueTimeZone(value: Any?): Long {
+        val timeZone = TimeZone.getDefault()
+        val date = Date(value as Long)
+        val utcMillis = date.time - timeZone.rawOffset
+        val calendar = Calendar.getInstance(timeZone)
+        calendar.timeInMillis = utcMillis
+        return calendar.timeInMillis
+    }
+
     fun getDateInMillisFrom(value: Long): String {
         val date = getDate(value)
         val day = (date.get(Calendar.DAY_OF_MONTH)).toString().padStart(2, '0')

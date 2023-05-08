@@ -18,6 +18,7 @@ import com.rodcollab.afazeres.collections.adapters.CompletedTaskListAdapter
 import com.rodcollab.afazeres.collections.adapters.UncompletedTaskListAdapter
 import com.rodcollab.afazeres.collections.ui.model.UiState
 import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
+import com.rodcollab.afazeres.util.DateUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -104,21 +105,14 @@ class TaskListFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.taskRecyclerView)
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun setupMaterialDatePicker() {
         val builder: MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()
         //.setTextInputFormat(SimpleDateFormat("dd/MM/yyyy"))
         val picker = builder.build()
         picker.show(this.parentFragmentManager, "DATE_PICKER")
 
-        picker.addOnPositiveButtonClickListener {
-            val timeZone = TimeZone.getDefault()
-            val date = Date(it as Long)
-            val utcMillis = date.time - timeZone.rawOffset
-            val calendar = Calendar.getInstance(timeZone)
-            calendar.timeInMillis = utcMillis
-            val localMillis = calendar.timeInMillis
-            viewModel.changeDate(localMillis)
+        picker.addOnPositiveButtonClickListener { value ->
+            viewModel.changeDate(DateUtil.getValueTimeZone(value))
         }
     }
 
