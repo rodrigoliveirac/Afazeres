@@ -27,5 +27,8 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="remindMe_dialog_positiveBtn">Remind me</string>
     <string name="one_day_before">%s day before</string>
+    <string name="one_day_from_now">%s day from now</string>
+    <string name="one_hour_from_now">%s hour from now</string>
+    <string name="thirty_min_from_now">%s min from now</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.rodcollab.afazeres.collections
+package com.rodcollab.afazeres.collections.ui
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner

@@ -1,4 +1,4 @@
-package com.rodcollab.afazeres.collections
+package com.rodcollab.afazeres.collections.ui
 
 import android.graphics.Canvas
 import android.graphics.Color

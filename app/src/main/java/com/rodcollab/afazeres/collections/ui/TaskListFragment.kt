@@ -1,4 +1,4 @@
-package com.rodcollab.afazeres.collections
+package com.rodcollab.afazeres.collections.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -16,6 +16,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.rodcollab.afazeres.R
 import com.rodcollab.afazeres.collections.adapters.CompletedTaskListAdapter
 import com.rodcollab.afazeres.collections.adapters.UncompletedTaskListAdapter
+import com.rodcollab.afazeres.collections.ui.model.UiState
 import com.rodcollab.afazeres.databinding.FragmentTaskListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -121,12 +122,12 @@ class TaskListFragment : Fragment() {
         }
     }
 
-    private fun bindUiState(uiState: TaskListViewModel.UiState) {
+    private fun bindUiState(uiState: UiState) {
 
 
         totalTasks(uiState)
 
-        binding.currentDate.text = uiState.date
+        binding.currentDate.text = uiState.currentDateSelectedTextView
 
         adapterUncompletedTasks.updateTasks(uiState.uncompletedTasks)
         adapterCompletedTasks.updateTasks(uiState.completedTasks)
@@ -134,7 +135,7 @@ class TaskListFragment : Fragment() {
 
     }
 
-    private fun totalTasks(uiState: TaskListViewModel.UiState) {
+    private fun totalTasks(uiState: UiState) {
         val totalUncompletedTasks = uiState.uncompletedTasks.size
         val totalCompleted = uiState.completedTasks.size
 

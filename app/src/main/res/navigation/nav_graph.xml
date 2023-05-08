@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.rodcollab.afazeres.collections.TaskListFragment"
+        android:name="com.rodcollab.afazeres.collections.ui.TaskListFragment"
         tools:layout="@layout/fragment_task_list">
 
         <action

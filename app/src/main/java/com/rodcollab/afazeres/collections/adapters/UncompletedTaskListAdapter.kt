@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.rodcollab.afazeres.collections.TaskListViewModel
+import com.rodcollab.afazeres.collections.ui.TaskListViewModel
 import com.rodcollab.afazeres.collections.model.TaskItem
 import com.rodcollab.afazeres.databinding.TaskItemBinding
 

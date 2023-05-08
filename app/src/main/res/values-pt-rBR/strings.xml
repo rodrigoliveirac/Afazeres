@@ -23,4 +23,7 @@
     <string name="cancel_dialog">Cancelar</string>
     <string name="remindMe_dialog_positiveBtn">Me lembre</string>
     <string name="one_day_before">%s dia antes</string>
+    <string name="one_day_from_now">Daqui a %s dia</string>
+    <string name="one_hour_from_now">Daqui a %s hora</string>
+    <string name="thirty_min_from_now">Daqui a %s minutos</string>
 </resources>
