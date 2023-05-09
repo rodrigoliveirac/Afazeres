@@ -7,11 +7,16 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.rodcollab.afazeres.auth.service.AccountService
 import com.rodcollab.afazeres.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var accountService: AccountService
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -23,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         setupNavigation()
-        if(navController.currentDestination?.id == R.id.FirstFragment) {
+        if (navController.currentDestination?.id == R.id.FirstFragment) {
             this.supportActionBar?.hide()
         }
     }
@@ -38,5 +43,12 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (accountService.hasUser) {
+            findNavController(R.id.FirstFragment)
+        }
     }
 }
