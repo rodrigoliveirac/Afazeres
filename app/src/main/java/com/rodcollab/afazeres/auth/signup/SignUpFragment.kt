@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.data.common.onTextChanged
+import com.rodcollab.afazeres.util.validators.onTextChanged
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rodcollab.afazeres.R
 import com.rodcollab.afazeres.util.hideKeyboard

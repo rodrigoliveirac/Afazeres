@@ -1,11 +1,14 @@
 package com.rodcollab.afazeres.auth.signup
 
 import androidx.lifecycle.*
-import com.rodcollab.afazeres.util.getEmailPrefix
+import com.rodcollab.afazeres.auth.service.AccountService
 import com.rodcollab.afazeres.util.validators.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel() : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(private val accountService: AccountService) : ViewModel() {
 
     val email by lazy { MutableLiveData<String>() }
     val password by lazy { MutableLiveData<String>() }
@@ -13,7 +16,7 @@ class SignUpViewModel() : ViewModel() {
     val emailError by lazy { MutableLiveData<String>() }
     val passwordError by lazy { MutableLiveData<String>() }
     val repeatPasswordError by lazy { MutableLiveData<String>() }
-    private val username: LiveData<String> = Transformations.map(email, ::generateUsername)
+    //private val username: LiveData<String> = Transformations.map(email, ::generateUsername)
 
     private val _emailIsValid by lazy { MutableLiveData(true) }
     var emailIsValid: LiveData<Boolean> = _emailIsValid
@@ -74,15 +77,12 @@ class SignUpViewModel() : ViewModel() {
     fun onSignupButtonClick() {
         if (emailIsValid.value == true && passwordIsValid.value == true && repeatPasswordIsValid.value == true) {
             viewModelScope.launch {
-//                accountService.register(
-//                    userName = username.value.toString(),
-//                    email = email.value.toString(),
-//                    password = password.value.toString()
-//                ) { isSuccessful ->
-//                    if (isSuccessful) {
-//                        _showRegistrationSuccessDialog.value = true
-//                    }
-//                }
+                accountService.createAccount(email = email.value.toString(), password = password.value.toString()) { isSuccessful ->
+                    if(isSuccessful) {
+                        _showRegistrationSuccessDialog.value = true
+                    }
+                    // TODO("do something when it's fails")
+                }
             }
 
         } else {
@@ -96,11 +96,11 @@ class SignUpViewModel() : ViewModel() {
     }
 
 
-    private fun generateUsername(email: String): String {
-        val prefix = getEmailPrefix(email)
-        val suffix = prefix.length
-        return "$prefix$suffix".lowercase()
-    }
+//    private fun generateUsername(email: String): String {
+//        val prefix = getEmailPrefix(email)
+//        val suffix = prefix.length
+//        return "$prefix$suffix".lowercase()
+//    }
 
     private fun <T> MediatorLiveData<T>.addSources(
         vararg sources: LiveData<out Any>,
