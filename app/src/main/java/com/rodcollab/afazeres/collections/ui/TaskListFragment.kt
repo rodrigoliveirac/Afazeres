@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,7 @@ class TaskListFragment : Fragment() {
 
     private var _binding: FragmentTaskListBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding: FragmentTaskListBinding get() = _binding!!
 
     private lateinit var adapterUncompletedTasks: UncompletedTaskListAdapter
     private lateinit var adapterCompletedTasks: CompletedTaskListAdapter
@@ -87,7 +88,7 @@ class TaskListFragment : Fragment() {
         viewModel
             .stateOnceAndStream()
             .observe(viewLifecycleOwner) {
-                CoroutineScope(Dispatchers.Main).launch {
+                lifecycleScope.launchWhenResumed {
                     bindUiState(it)
                 }
             }
