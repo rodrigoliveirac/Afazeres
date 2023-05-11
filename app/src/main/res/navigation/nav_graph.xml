@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/SignUpFragment">
+    app:startDestination="@id/LoginFragment">
 
     <fragment
         android:id="@+id/FirstFragment"
@@ -35,7 +35,8 @@
 
     <fragment
         android:id ="@+id/LoginFragment"
-        android:name="com.rodcollab.afazeres.auth.login.LoginFragment">
+        android:name="com.rodcollab.afazeres.auth.login.LoginFragment"
+        android:label="Login">
 
         <action
             android:id="@+id/action_loginScreen_to_SignUpScreen"

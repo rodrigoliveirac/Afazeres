@@ -25,17 +25,39 @@ class AccountServiceImpl @Inject constructor(
             awaitClose { auth.removeAuthStateListener(listener) }
         }
 
+    override suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String,
+        isSuccessful: (Boolean, String) -> Unit
+    ) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("LOGIN_USER", "signInWithEmail:success")
+                    isSuccessful(task.isSuccessful, "Welcome, ${task.result.user?.displayName}!")
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("LOGIN_USER", "signInWithEmail:failure", task.exception)
+                    isSuccessful(task.isSuccessful, task.exception?.message.toString())
+                }
+            }
+    }
+
     override suspend fun authenticate(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun createAccount(email: String, password: String, isSuccessful: (Boolean) -> Unit) {
+    override suspend fun createAccount(
+        email: String,
+        password: String,
+        isSuccessful: (Boolean) -> Unit
+    ) {
         auth
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                if(task.isSuccessful) {
+                if (task.isSuccessful) {
                     Log.d("CREATE_USER_ACCOUNT", "createUserWithEmail:success")
-                    val user = auth.currentUser
                     isSuccessful(true)
                 } else {
                     Log.w("CREATE_USER_ACCOUNT", "createUserWithEmail:failure", task.exception)
