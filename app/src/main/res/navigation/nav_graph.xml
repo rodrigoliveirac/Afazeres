@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/LoginFragment">
+    app:startDestination="@id/TaskListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/TaskListFragment"
         android:name="com.rodcollab.afazeres.collections.ui.TaskListFragment"
         tools:layout="@layout/fragment_task_list">
 
@@ -40,7 +40,9 @@
 
         <action
             android:id="@+id/action_loginScreen_to_SignUpScreen"
-            app:destination="@id/SignUpFragment" />
+            app:destination="@id/SignUpFragment"
+            app:popUpTo="@+id/LoginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 
