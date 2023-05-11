@@ -40,6 +40,6 @@
     <string name="create_account"><u>Create account</u></string>
     <string name="app_icon">App Icon</string>
     <string name="password_hint">Password</string>
-    <string name="login_hint" translatable="false">Login</string>
+    <string name="login_hint">Login</string>
 
 </resources>
