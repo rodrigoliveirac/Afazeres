@@ -26,4 +26,14 @@
     <string name="one_day_from_now">Daqui a %s dia</string>
     <string name="one_hour_from_now">Daqui a %s hora</string>
     <string name="thirty_min_from_now">Daqui a %s minutos</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="signup_repeat_password_hint">Repetir senha</string>
+    <string name="signup_password_hint">Senha</string>
+    <string name="signup_email_hint">Email</string>
+    <string name="last_name">Último nome</string>
+    <string name="first_name">Nome</string>
+    <string name="signup_name_hint">Nome</string>
+    <string name="create_account">Criar conta</string>
+    <string name="app_icon">Ícone do aplicativo</string>
+    <string name="password_hint">Senha</string>
 </resources>

@@ -30,5 +30,16 @@
     <string name="one_day_from_now">%s day from now</string>
     <string name="one_hour_from_now">%s hour from now</string>
     <string name="thirty_min_from_now">%s min from now</string>
+    <string name="register_button">To Register</string>
+    <string name="signup_repeat_password_hint">Repeat Password</string>
+    <string name="signup_password_hint">Password</string>
+    <string name="signup_email_hint">Email</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="signup_name_hint">Name</string>
+    <string name="create_account"><u>Create account</u></string>
+    <string name="app_icon">App Icon</string>
+    <string name="password_hint">Password</string>
+    <string name="login_hint" translatable="false">Login</string>
 
 </resources>
