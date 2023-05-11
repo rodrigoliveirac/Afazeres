@@ -42,10 +42,14 @@ class LoginFragment : Fragment() {
         viewModel.navigateToMainScreen.observe(viewLifecycleOwner) { loginResult ->
             if(loginResult.navigate) {
                 Toast.makeText(requireContext(), loginResult.msg, Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.FirstFragment)
+                findNavController().navigate(R.id.TaskListFragment)
             } else {
                 Toast.makeText(requireContext(), loginResult.msg, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.tvCreateAccount.setOnClickListener {
+            findNavController().navigate(R.id.SignUpFragment)
         }
     }
 }
