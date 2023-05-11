@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         setupNavigation()
-        if (navController.currentDestination?.id == R.id.FirstFragment) {
+        if (navController.currentDestination?.id == R.id.TaskListFragment) {
             this.supportActionBar?.hide()
         }
     }
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (accountService.hasUser) {
-            navController.navigate(R.id.FirstFragment)
+        if (!accountService.hasUser) {
+            navController.navigate(R.id.LoginFragment)
         }
     }
 }
