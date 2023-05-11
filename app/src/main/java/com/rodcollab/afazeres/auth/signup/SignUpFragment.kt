@@ -17,7 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.rodcollab.afazeres.R
 import com.rodcollab.afazeres.util.hideKeyboard
 import com.rodcollab.afazeres.databinding.FragmentSignUpBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
