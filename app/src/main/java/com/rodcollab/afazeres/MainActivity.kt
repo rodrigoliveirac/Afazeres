@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (accountService.hasUser) {
-            findNavController(R.id.FirstFragment)
+            navController.navigate(R.id.FirstFragment)
         }
     }
 }
