@@ -1,6 +1,7 @@
 package com.rodcollab.afazeres.core.model
 
 data class TaskDomain(
+    val userId:String,
     val taskId: String,
     val taskTitle: String,
     val taskCategory: String,
