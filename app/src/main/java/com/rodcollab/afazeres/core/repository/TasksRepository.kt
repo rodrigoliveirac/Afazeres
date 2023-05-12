@@ -5,22 +5,23 @@ import kotlinx.coroutines.flow.Flow
 
 interface TasksRepository {
 
-    suspend fun uncompletedTasks(date: String): List<TaskDomain>
+    suspend fun uncompletedTasks(currentUserId: String,date: String): List<TaskDomain>
 
-    suspend fun completedTasks(date: String): List<TaskDomain>
+    suspend fun completedTasks(currentUserId: String, date: String): List<TaskDomain>
 
-    fun tasksWithAlarm(): Flow<List<TaskDomain>>
+    fun tasksWithAlarm(currentUserId: String): Flow<List<TaskDomain>>
 
     suspend fun toggleTaskCompleted(taskId: String, isCompleted: Int)
 
     suspend fun add(
+        currentUserId: String,
         taskTitle: String,
         taskCategory: String,
         taskDate: Long?,
         taskTime: String?,
         alarmActive: Boolean,
         reminderTime: Long?,
-        triggerTime: Long?
+        triggerTime: Long?,
     )
 
     suspend fun delete(taskId: String)

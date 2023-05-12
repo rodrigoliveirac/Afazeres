@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.rodcollab.afazeres.core.repository.TasksRepository
+import com.rodcollab.afazeres.form.domain.GetCurrentUserIdUseCase
 import com.rodcollab.afazeres.util.TextUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskFormViewModel @Inject constructor(
     private val app: Application,
+    private val getCurrentUserId: GetCurrentUserIdUseCase,
     private val repository: TasksRepository
 ) : AndroidViewModel(app) {
 
@@ -75,6 +77,7 @@ class TaskFormViewModel @Inject constructor(
             ) else null
 
             repository.add(
+                currentUserId = getCurrentUserId(),
                 taskTitle = taskTitle,
                 taskCategory = taskCategory,
                 taskDate = taskDate,

@@ -11,9 +11,10 @@ import javax.inject.Inject
 
 class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksRepository {
 
-    override suspend fun uncompletedTasks(date: String): List<TaskDomain> {
-        return dao.fetchUncompletedTasks(date).map {
+    override suspend fun uncompletedTasks(currentUserId: String, date: String): List<TaskDomain> {
+        return dao.fetchUncompletedTasks(currentUserId, date).map {
             TaskDomain(
+                userId = it.userId,
                 taskId = it.uuid,
                 taskTitle = it.title,
                 taskCategory = it.category,
@@ -28,9 +29,10 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         }
     }
 
-    override suspend fun completedTasks(date: String): List<TaskDomain> {
-        return dao.fetchCompletedTasks(date).map {
+    override suspend fun completedTasks(currentUserId: String, date: String): List<TaskDomain> {
+        return dao.fetchCompletedTasks(currentUserId, date).map {
             TaskDomain(
+                userId = it.userId,
                 taskId = it.uuid,
                 taskTitle = it.title,
                 taskCategory = it.category,
@@ -45,10 +47,11 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
         }
     }
 
-    override fun tasksWithAlarm(): Flow<List<TaskDomain>> {
-        return dao.fetchTasksWithAlarm().map { tasks ->
+    override fun tasksWithAlarm(currentUserId: String): Flow<List<TaskDomain>> {
+        return dao.fetchTasksWithAlarm(currentUserId).map { tasks ->
             tasks.map {
                 TaskDomain(
+                    userId = it.userId,
                     taskId = it.uuid,
                     taskTitle = it.title,
                     taskCategory = it.category,
@@ -70,6 +73,7 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
     }
 
     override suspend fun add(
+        currentUserId: String,
         taskTitle: String,
         taskCategory: String,
         taskDate: Long?,
@@ -81,6 +85,7 @@ class TasksRepositoryImpl @Inject constructor(private val dao: TaskDao) : TasksR
 
         val newTask = Task(
             uuid = UUID.randomUUID().toString(),
+            userId = currentUserId,
             title = taskTitle,
             category = taskCategory,
             date = convertDate(taskDate),

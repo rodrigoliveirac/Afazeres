@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.rodcollab.afazeres.collections.domain.*
 import com.rodcollab.afazeres.collections.model.TaskItem
 import com.rodcollab.afazeres.collections.ui.model.UiState
+import com.rodcollab.afazeres.form.domain.GetCurrentUserIdUseCase
 import com.rodcollab.afazeres.receiver.AlarmReceiver
 import com.rodcollab.afazeres.util.DateUtil
 import com.rodcollab.afazeres.util.TextUtil
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
     private val app: Application,
+    private val getCurrentUserIdUseCase: GetCurrentUserIdUseCase,
     private val getTasksWithAlarmUseCase: GetTasksWithAlarmUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
     private val onToggleTaskCompletedUseCase: OnToggleTaskCompletedUseCase,
@@ -70,8 +72,8 @@ class TaskListViewModel @Inject constructor(
             uiState.value?.let { state ->
                 uiState.postValue(
                     UiState(
-                        uncompletedTasks = getUncompletedTasksUseCase(state.dateToFetchTasks),
-                        completedTasks = getCompletedTasksUseCase(state.dateToFetchTasks),
+                        uncompletedTasks = getUncompletedTasksUseCase(getCurrentUserIdUseCase(),state.dateToFetchTasks),
+                        completedTasks = getCompletedTasksUseCase(getCurrentUserIdUseCase(),state.dateToFetchTasks),
                         dateToFetchTasks = state.dateToFetchTasks,
                         currentDateSelectedTextView = state.currentDateSelectedTextView
                     )
@@ -83,12 +85,14 @@ class TaskListViewModel @Inject constructor(
 
     private fun tasksWithAlarm() {
         getTasksWithAlarmJob?.cancel()
-        getTasksWithAlarm()
-
+       // TODO("ver se a notificacao ainda funciona")
+        viewModelScope.launch {
+            getTasksWithAlarm()
+        }
     }
 
-    private fun getTasksWithAlarm() {
-        getTasksWithAlarmJob = getTasksWithAlarmUseCase().onEach { tasks ->
+    private suspend fun getTasksWithAlarm() {
+        getTasksWithAlarmJob = getTasksWithAlarmUseCase(getCurrentUserIdUseCase()).onEach { tasks ->
 
             tasks.onEach { task ->
                 setupAlarm(task)
@@ -143,8 +147,8 @@ class TaskListViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.postValue(
                 UiState(
-                    uncompletedTasks = getUncompletedTasksUseCase(dateToFetchTasks(value)),
-                    completedTasks = getCompletedTasksUseCase(dateToFetchTasks(value)),
+                    uncompletedTasks = getUncompletedTasksUseCase(getCurrentUserIdUseCase(),dateToFetchTasks(value)),
+                    completedTasks = getCompletedTasksUseCase(getCurrentUserIdUseCase(),dateToFetchTasks(value)),
                     dateToFetchTasks = dateToFetchTasks(value),
                     currentDateSelectedTextView = headerTextViewDate(value)
                 )

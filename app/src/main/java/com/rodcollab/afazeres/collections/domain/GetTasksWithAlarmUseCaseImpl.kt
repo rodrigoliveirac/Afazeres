@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class GetTasksWithAlarmUseCaseImpl @Inject constructor(private val tasks: TasksRepository) :
     GetTasksWithAlarmUseCase {
-    override fun invoke(): Flow<List<TaskItem>> {
-        return tasks.tasksWithAlarm().map { tasks ->
+    override fun invoke(currentUserId: String): Flow<List<TaskItem>> {
+        return tasks.tasksWithAlarm(currentUserId).map { tasks ->
             tasks.map {
                     TaskItem(
                         id = it.taskId,

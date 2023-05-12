@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class GetUncompletedTasksUseCaseImpl @Inject constructor(private val tasksRepository: TasksRepository) :
     GetUncompletedTasksUseCase {
-    override suspend fun invoke(date: String): List<TaskItem> {
-        return tasksRepository.uncompletedTasks(date).map { task ->
+    override suspend fun invoke(currentUserId: String, date: String): List<TaskItem> {
+        return tasksRepository.uncompletedTasks(currentUserId, date).map { task ->
             TaskItem(
                 id = task.taskId,
                 title = task.taskTitle,
